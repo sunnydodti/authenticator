@@ -15,22 +15,32 @@ class AuthItemList extends StatefulWidget {
 class _AuthItemListState extends State<AuthItemList> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthItemProvider>(
-      builder: (context, provider, child) {
-        return RefreshIndicator(
-            onRefresh: () => provider.refresh(),
-            child: provider.authItems.isEmpty
-                ? Text('Empty')
-                : Scrollbar(
-                    interactive: true,
-                    radius: const Radius.circular(5),
-                    child: ListView.builder(
-                        itemCount: provider.authItems.length,
-                        itemBuilder: (context, index) {
-                          AuthItem authItem = provider.authItems[index];
-                          return AuthItemTile(authItem: authItem);
-                        })));
+    return FutureBuilder(
+      future: _refresh(context),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return Consumer<AuthItemProvider>(
+          builder: (context, provider, child) {
+            return RefreshIndicator(
+                onRefresh: () => provider.refresh(),
+                child: provider.authItems.isEmpty
+                    ? Text('Empty')
+                    : Scrollbar(
+                        interactive: true,
+                        radius: const Radius.circular(5),
+                        child: ListView.builder(
+                            itemCount: provider.authItems.length,
+                            itemBuilder: (context, index) {
+                              AuthItem authItem = provider.authItems[index];
+                              return AuthItemTile(authItem: authItem);
+                            })));
+          },
+        );
       },
     );
+  }
+
+  Future<void> _refresh(BuildContext context, {bool notify = true}) async {
+    final provider = Provider.of<AuthItemProvider>(context, listen: false);
+    provider.refresh(notify: notify);
   }
 }

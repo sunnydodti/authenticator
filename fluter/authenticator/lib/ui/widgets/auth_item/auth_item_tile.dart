@@ -17,17 +17,19 @@ class AuthItemTile extends StatefulWidget {
 class AuthItemTileState extends State<AuthItemTile> {
   late Timer _timer;
   late String _otpCode;
-  TOTP totp = TOTP("JBSWY3DPEHPK3PXP", digits: 6);
+  late TOTP totp = TOTP("", digits: 6);
 
   @override
   void initState() {
     super.initState();
     _generateOtp();
-    _otpCode = totp.now();
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _updateProgress();
     });
+
+    totp = TOTP(widget.authItem.secret);
+    _otpCode = totp.now();
   }
 
   void _generateOtp() {

@@ -7,7 +7,7 @@ import '../../services/auth_item_service.dart';
 class AuthItemProvider extends ChangeNotifier {
   late final Future<AuthItemService> _authItemService;
   static final Logger _logger =
-      Logger(printer: SimplePrinter(), level: Level.info);
+  Logger(printer: SimplePrinter(), level: Level.info);
 
   AuthItemProvider() {
     _init();
@@ -17,28 +17,7 @@ class AuthItemProvider extends ChangeNotifier {
     _authItemService = AuthItemService.create();
   }
 
-  List<AuthItem> _authItems = [
-    AuthItem(
-        name: 'name',
-        serviceName: 'serviceName',
-        secret: 'secret1',
-        code: 'code1'),
-    AuthItem(
-        name: 'name',
-        serviceName: 'serviceName',
-        secret: 'secret2',
-        code: 'code2'),
-    AuthItem(
-        name: 'name',
-        serviceName: 'serviceName',
-        secret: 'secret3',
-        code: 'code3'),
-    AuthItem(
-        name: 'name',
-        serviceName: 'serviceName',
-        secret: 'secret4',
-        code: 'code4'),
-  ];
+  List<AuthItem> _authItems = [];
 
   /// Get list of all authenticator items
   List<AuthItem> get authItems => _authItems;

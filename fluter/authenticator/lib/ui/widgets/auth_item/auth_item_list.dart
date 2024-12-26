@@ -41,6 +41,6 @@ class _AuthItemListState extends State<AuthItemList> {
 
   Future<void> _refresh(BuildContext context, {bool notify = true}) async {
     final provider = Provider.of<AuthItemProvider>(context, listen: false);
-    provider.refresh(notify: notify);
+    await provider.refresh(notify: notify);
   }
 }

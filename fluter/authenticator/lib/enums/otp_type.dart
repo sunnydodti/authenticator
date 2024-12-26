@@ -1,0 +1,1 @@
+enum OTPType { hotp, totp }

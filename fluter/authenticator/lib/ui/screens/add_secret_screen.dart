@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../data/providers/auth_item_provider.dart';
 import '../../models/auth_item.dart';
+import '../../services/otp/otp_service.dart';
 import '../../tools/logger.dart';
 
 class AddSecretScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class AddSecretScreen extends StatefulWidget {
 }
 
 class AddSecretScreenState extends State<AddSecretScreen> {
+  final OtpService otpService = OtpService();
   Logger logger = Log.logger;
   final _formKey = GlobalKey<FormState>();
 
@@ -39,11 +41,16 @@ class AddSecretScreenState extends State<AddSecretScreen> {
 
       logger.i('Name: $name, Key: $key, Key Type: $keyType');
 
-      // Optionally, clear the form after submission
       _formKey.currentState?.reset();
       setState(() {
         _selectedKeyType = null;
       });
+
+      if (!otpService.isValidSecret(key)) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Invalid Base32 Key')));
+        return;
+      }
 
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Secret saved successfully')));

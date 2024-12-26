@@ -2,6 +2,8 @@ import 'package:authenticator/ui/helpers/navigation_helper.dart';
 import 'package:authenticator/ui/screens/add_secret_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../screens/scan_secret_screen.dart';
+
 class AddAuthItemButton extends StatefulWidget {
   const AddAuthItemButton({super.key});
 
@@ -69,7 +71,9 @@ class AddAuthItemButtonState extends State<AddAuthItemButton>
     );
   }
 
-  void handleCameraInput() {}
+  void handleCameraInput() {
+    NavigationHelper.navigateToScreen(context, ScanSecretScreen());
+  }
 
   void handleKeyboardInput() {
     NavigationHelper.navigateToScreen(context, AddSecretScreen());

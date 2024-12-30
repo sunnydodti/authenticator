@@ -41,16 +41,16 @@ class AddSecretScreenState extends State<AddSecretScreen> {
 
       logger.i('Name: $name, Key: $key, Key Type: $keyType');
 
-      _formKey.currentState?.reset();
-      setState(() {
-        _selectedKeyType = null;
-      });
-
       if (!otpService.isValidSecret(key)) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Invalid Base32 Key')));
         return;
       }
+
+      _formKey.currentState?.reset();
+      setState(() {
+        _selectedKeyType = null;
+      });
 
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Secret saved successfully')));
@@ -125,7 +125,7 @@ class AddSecretScreenState extends State<AddSecretScreen> {
     return TextFormField(
       controller: _keyController,
       decoration: InputDecoration(
-        labelText: 'Key',
+        labelText: 'Key (Base32)',
         hintText: "Enter key",
         border: OutlineInputBorder(),
       ),

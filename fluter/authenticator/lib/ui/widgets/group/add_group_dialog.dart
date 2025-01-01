@@ -59,7 +59,6 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     // ThemeData theme = Theme.of(context);
     // TextStyle buttonStyle =
     //     TextStyle(color: ColorHelper.getButtonTextColor(theme));

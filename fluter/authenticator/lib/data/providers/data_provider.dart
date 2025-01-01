@@ -136,4 +136,21 @@ class DataProvider extends ChangeNotifier {
 
     return listItems;
   }
+
+  void resetStackTo(Group group) {
+    if (groupStack.last == group) return;
+    List<Group> newStack = [];
+
+    for (Group g in groupStack) {
+      if (!(g == group)) {
+        newStack.add(g);
+        continue;
+      }
+      newStack.add(g);
+      break;
+    }
+    groupStack = newStack;
+    _currentGroup = group;
+    refresh();
+  }
 }

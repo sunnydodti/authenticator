@@ -12,6 +12,10 @@ class Breadcrumbs extends StatefulWidget {
 
 class _BreadcrumbsState extends State<Breadcrumbs> {
   final ScrollController _scrollController = ScrollController();
+
+  DataProvider get dataProvider =>
+      Provider.of<DataProvider>(context, listen: false);
+
   @override
   void initState() {
     super.initState();
@@ -71,7 +75,13 @@ class _BreadcrumbsState extends State<Breadcrumbs> {
     );
   }
 
-  Text buildBreadcrumbText(Group group) => Text(group.name);
+  GestureDetector buildBreadcrumbText(Group group) => GestureDetector(
+        child: Text(group.name),
+        onTap: () {
+          dataProvider.resetStackTo(group);
+          print(group.name);
+        },
+      );
 
-  Text buildSeprator() => Text("/");
+  Text buildSeprator() => Text(" / ");
 }

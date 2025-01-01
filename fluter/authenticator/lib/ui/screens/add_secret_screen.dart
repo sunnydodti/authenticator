@@ -1,9 +1,11 @@
+import 'package:authenticator/constants/constants.dart';
 import 'package:authenticator/data/providers/group_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/providers/auth_item_provider.dart';
+import '../../data/providers/data_provider.dart';
 import '../../models/auth_item.dart';
 import '../../services/otp/otp_service.dart';
 import '../../tools/logger.dart';
@@ -21,6 +23,9 @@ class AddSecretScreenState extends State<AddSecretScreen> {
 
   AuthItemProvider get authItemProvider =>
       Provider.of<AuthItemProvider>(context, listen: false);
+
+  DataProvider get dataProvider =>
+      Provider.of<DataProvider>(context, listen: false);
 
   final OtpService otpService = OtpService();
   Logger logger = Log.logger;
@@ -45,7 +50,7 @@ class AddSecretScreenState extends State<AddSecretScreen> {
       final name = _nameController.text;
       final key = _keyController.text;
       final keyType = _selectedKeyType;
-      int? groupId;
+      int groupId = Constants.db.group.defaultGroupId;
 
       logger.i('Name: $name, Key: $key, Key Type: $keyType');
 
@@ -60,8 +65,8 @@ class AddSecretScreenState extends State<AddSecretScreen> {
         _selectedKeyType = null;
       });
 
-      if (groupProvider.currentGroup != null) {
-        groupId = groupProvider.currentGroup?.id;
+      if (dataProvider.currentGroup != null) {
+        groupId = dataProvider.currentGroup!.id!;
       }
 
       AuthItem authItem = AuthItem(
@@ -71,10 +76,16 @@ class AddSecretScreenState extends State<AddSecretScreen> {
           code: "",
           groupId: groupId);
 
-      authItemProvider.createAuthItem(authItem);
+      int result = await authItemProvider.createAuthItem(authItem);
+      String message = 'Secret saved successfully';
+      if (result < 0) message = "Couldn't add account";
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Secret saved successfully')));
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(message)));
+        dataProvider.refresh(notify: true);
+        Navigator.pop(context);
+      }
     }
   }
 

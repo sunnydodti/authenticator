@@ -31,6 +31,19 @@ class AuthItemService {
     }
   }
 
+  Future<List<AuthItem>> getAuthItemsForGroup(int groupId) async {
+    try {
+      final List<Map<String, dynamic>> authItems =
+          await _authItemHelper.getAuthItemsForGroup(groupId);
+      return authItems
+          .map((authItemMap) => AuthItem.fromMap(authItemMap))
+          .toList();
+    } catch (e, stackTrace) {
+      _logger.e("Error getting auth_items - $e - \n$stackTrace");
+      return [];
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getAuthItemMaps() async {
     try {
       return await _authItemHelper.getAuthItems();

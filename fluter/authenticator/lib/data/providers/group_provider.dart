@@ -22,12 +22,6 @@ class GroupProvider extends ChangeNotifier {
   /// Get list of all groups
   List<Group> get groups => _groups;
 
-  Group? _currentGroup;
-
-  Group? get currentGroup => _currentGroup;
-
-  set setCurrentGroup(Group group) => _currentGroup = group;
-
   /// Add an group item in memory (not DB)
   void addGroup(Group item) {
     _groups.add(item);
@@ -100,11 +94,12 @@ class GroupProvider extends ChangeNotifier {
   }
 
   /// create Auth Item in DB
-  Future<void> createNewGroup(String name, {bool isLeaf = true}) async {
+  Future<int> createNewGroup(String name, int parentId,
+      {bool isLeaf = true}) async {
     GroupService service = await _groupService;
-    var result = await service.createNewGroup(name, parent: _currentGroup, isLeaf: isLeaf);
-    // if (await service.addGroup(item) > 0) refresh();
+    var result = await service.createNewGroup(name, parentId, isLeaf: isLeaf);
 
-    int a = 0;
+    if (result > 0) return result;
+    return -1;
   }
 }

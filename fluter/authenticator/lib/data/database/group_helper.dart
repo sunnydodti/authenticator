@@ -60,6 +60,16 @@ class GroupHelper {
     return await database.query(Constants.db.group.table);
   }
 
+  Future<List<Map<String, dynamic>>> getGroupsIn(int groupId) async {
+    _logger.i("Getting all groups");
+    Database database = getDatabase;
+    return await database.query(
+      Constants.db.group.table,
+      where: "${Constants.db.group.parentId} = ?",
+      whereArgs: [groupId],
+    );
+  }
+
   Future<Map<String, dynamic>?> getGroupById(String id) async {
     _logger.i("Getting group by ID: $id");
     Database database = getDatabase;

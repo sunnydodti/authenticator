@@ -77,8 +77,10 @@ class AuthItemProvider extends ChangeNotifier {
   }
 
   /// create Auth Item in DB
-  void createAuthItem(AuthItem item) async {
+  Future<int> createAuthItem(AuthItem item) async {
     AuthItemService service = await _authItemService;
-    if (await service.addAuthItem(item) > 0) refresh();
+    int result = await service.addAuthItem(item);
+    if (result > 0) refresh();
+    return result;
   }
 }

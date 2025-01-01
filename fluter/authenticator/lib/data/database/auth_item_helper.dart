@@ -53,6 +53,16 @@ class AuthItemHelper {
     return await database.query(Constants.db.authItem.table);
   }
 
+  Future<List<Map<String, dynamic>>> getAuthItemsForGroup(int groupId) async {
+    _logger.i("getting auth items");
+    Database database = getDatabase;
+    return await database.query(
+      Constants.db.authItem.table,
+      where: "${Constants.db.authItem.groupId} = ?",
+      whereArgs: [groupId],
+    );
+  }
+
   Future<Map<String, dynamic>?> getAuthItemBySecret(String secret) async {
     _logger.i("getting auth item by secret $secret");
     Database database = getDatabase;

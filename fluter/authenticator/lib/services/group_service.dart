@@ -29,6 +29,17 @@ class GroupService {
     }
   }
 
+  Future<List<Group>> getGroupsIn(int groupId) async {
+    try {
+      final List<Map<String, dynamic>> groupMaps =
+          await _groupHelper.getGroupsIn(groupId);
+      return groupMaps.map((groupMap) => Group.fromMap(groupMap)).toList();
+    } catch (e, stackTrace) {
+      _logger.e("Error getting groups - $e - \n$stackTrace");
+      return [];
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getGroupMaps() async {
     try {
       return await _groupHelper.getGroups();
@@ -107,14 +118,14 @@ class GroupService {
 
 
   /// create a new group with/without parent
-  Future<int> createNewGroup(String name,
-      {Group? parent, bool isLeaf = true}) async {
+  Future<int> createNewGroup(String name, int parentId,
+      {bool isLeaf = true}) async {
     try {
       Group group = Group(
         id: -1,
         name: name,
         isLeaf: isLeaf,
-        parentId: parent?.parentId,
+        parentId: parentId,
       );
       final result = await _groupHelper.addGroup(group.toMap());
       return result;

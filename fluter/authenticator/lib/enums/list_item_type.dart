@@ -1,0 +1,1 @@
+enum ListItemType { group, authItem }

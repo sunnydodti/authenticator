@@ -1,4 +1,3 @@
-import 'package:authenticator/data/providers/auth_item_provider.dart';
 import 'package:authenticator/data/providers/group_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +7,13 @@ class RefreshButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GroupProvider>(builder: (context, value, child) {
-      return IconButton(onPressed: (){}, icon: Icon(Icons.refresh));
-    },);;
+    return Consumer<GroupProvider>(
+      builder: (context, provider, child) {
+        return IconButton(
+          onPressed: () => provider.refresh(notify: true),
+          icon: Icon(Icons.refresh),
+        );
+      },
+    );
   }
 }

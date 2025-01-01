@@ -1,3 +1,4 @@
+import 'package:authenticator/data/providers/data_provider.dart';
 import 'package:authenticator/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => DataProvider()),
         ChangeNotifierProvider(create: (context) => AuthItemProvider()),
         ChangeNotifierProvider(create: (context) => GroupProvider()),
       ],

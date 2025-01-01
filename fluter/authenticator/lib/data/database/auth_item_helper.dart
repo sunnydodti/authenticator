@@ -22,10 +22,11 @@ class AuthItemHelper {
         ${Constants.db.authItem.id} INTEGER PRIMARY KEY AUTOINCREMENT,
         ${Constants.db.authItem.name} TEXT,
         ${Constants.db.authItem.secret} TEXT UNIQUE,
+        ${Constants.db.authItem.groupId} INTEGER DEFAULT ${Constants.db.group.table},
         ${Constants.db.common.createdAt} TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         ${Constants.db.common.modifiedAt} TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-        ''');
+      )
+      ''');
 
       _logger.i("creating trigger ${Constants.db.authItem.triggerModifiedAt}");
       await database.execute('''
@@ -55,23 +56,32 @@ class AuthItemHelper {
   Future<Map<String, dynamic>?> getAuthItemBySecret(String secret) async {
     _logger.i("getting auth item by secret $secret");
     Database database = getDatabase;
-    final result = await database.query(Constants.db.authItem.table,
-        where: '${Constants.db.authItem.secret} = ?', whereArgs: [secret]);
+    final result = await database.query(
+      Constants.db.authItem.table,
+      where: '${Constants.db.authItem.secret} = ?',
+      whereArgs: [secret],
+    );
     return result.isNotEmpty ? result.first : null;
   }
 
   Future<int> deleteAuthItemById(int id) async {
     _logger.i("deleting auth item by id $id");
     Database database = getDatabase;
-    return await database.delete(Constants.db.authItem.table,
-        where: '${Constants.db.authItem.id} = ?', whereArgs: [id]);
+    return await database.delete(
+      Constants.db.authItem.table,
+      where: '${Constants.db.authItem.id} = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<int> deleteAuthItemBySecret(String secret) async {
     _logger.i("deleting auth item by secret $secret");
     Database database = getDatabase;
-    return await database.delete(Constants.db.authItem.table,
-        where: '${Constants.db.authItem.secret} = ?', whereArgs: [secret]);
+    return await database.delete(
+      Constants.db.authItem.table,
+      where: '${Constants.db.authItem.secret} = ?',
+      whereArgs: [secret],
+    );
   }
 
   Future<int> deleteAllAuthItems() async {

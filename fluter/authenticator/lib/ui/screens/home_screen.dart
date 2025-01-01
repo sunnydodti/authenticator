@@ -20,12 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBarWidget(),
         body: AuthItemList(),
         backgroundColor: Constants.theme.dark.backgroundColor,
-        floatingActionButton:
-            AddAuthItemButton() // floatingActionButton: FloatingActionButton(
-        //   onPressed: addAuthItem,
-        //   child: Icon(Icons.add),
-        // ),
-        );
+      floatingActionButton: AddAuthItemButton(),
+    );
   }
 
   void addAuthItem() {

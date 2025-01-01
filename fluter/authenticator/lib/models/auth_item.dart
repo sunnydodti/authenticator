@@ -1,11 +1,17 @@
 import 'dart:convert';
 
+import '../constants/constants.dart';
+import '../constants/database_constants.dart';
+
+AuthItemConstants c = Constants.db.authItem;
+
 class AuthItem {
   final int? id;
   final String name;
   final String? serviceName;
   final String secret;
   final String? code;
+  final int? groupId;
 
   AuthItem({
     this.id,
@@ -13,6 +19,7 @@ class AuthItem {
     required this.serviceName,
     required this.secret,
     required this.code,
+    this.groupId,
   });
 
   AuthItem copyWith({
@@ -21,6 +28,7 @@ class AuthItem {
     String? serviceName,
     String? secret,
     String? code,
+    int? groupId,
   }) {
     return AuthItem(
       id: id ?? this.id,
@@ -28,26 +36,29 @@ class AuthItem {
       serviceName: serviceName ?? this.serviceName,
       secret: secret ?? this.secret,
       code: code ?? this.code,
+      groupId: groupId ?? this.groupId,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
-      'name': name,
-      // 'serviceName': serviceName,
-      'secret': secret,
-      // 'code': code,
+      c.id: id,
+      c.name: name,
+      // c.serviceName: serviceName,
+      c.secret: secret,
+      // c.code: code,
+      c.groupId: groupId,
     };
   }
 
   factory AuthItem.fromMap(Map<String, dynamic> map) {
     return AuthItem(
-      id: map['id'] != null ? map['id'] as int : null,
-      name: map['name'] as String,
-      serviceName: map['serviceName'] as String?,
-      secret: map['secret'] as String,
-      code: map['code'] as String?,
+      id: map[c.id] != null ? map[c.id] as int : null,
+      name: map[c.name] as String,
+      serviceName: map[c.serviceName] as String?,
+      secret: map[c.secret] as String,
+      code: map[c.code] as String?,
+      groupId: map[c.groupId] as int?,
     );
   }
 
@@ -58,7 +69,7 @@ class AuthItem {
 
   @override
   String toString() {
-    return 'AuthItem(id: $id, name: $name, serviceName: $serviceName, secret: $secret, code: $code)';
+    return 'AuthItem(${c.id}: $id, ${c.name}: $name, ${c.serviceName}: $serviceName, ${c.secret}: $secret, ${c.code}: $code, ${c.groupId}: $groupId)';
   }
 
   @override
@@ -70,6 +81,7 @@ class AuthItem {
         other.serviceName == serviceName &&
         other.secret == secret &&
         other.code == code;
+    other.groupId == groupId;
   }
 
   @override
@@ -78,6 +90,7 @@ class AuthItem {
         name.hashCode ^
         serviceName.hashCode ^
         secret.hashCode ^
-        code.hashCode;
+        code.hashCode ^
+        groupId.hashCode;
   }
 }

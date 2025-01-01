@@ -1,3 +1,4 @@
+import 'package:authenticator/data/providers/group_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,12 @@ class AddSecretScreen extends StatefulWidget {
 }
 
 class AddSecretScreenState extends State<AddSecretScreen> {
+  GroupProvider get groupProvider =>
+      Provider.of<GroupProvider>(context, listen: false);
+
+  AuthItemProvider get authItemProvider =>
+      Provider.of<AuthItemProvider>(context, listen: false);
+
   final OtpService otpService = OtpService();
   Logger logger = Log.logger;
   final _formKey = GlobalKey<FormState>();
@@ -33,11 +40,12 @@ class AddSecretScreenState extends State<AddSecretScreen> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate() && _selectedKeyType != null) {
       final name = _nameController.text;
       final key = _keyController.text;
       final keyType = _selectedKeyType;
+      int? groupId;
 
       logger.i('Name: $name, Key: $key, Key Type: $keyType');
 
@@ -52,14 +60,21 @@ class AddSecretScreenState extends State<AddSecretScreen> {
         _selectedKeyType = null;
       });
 
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Secret saved successfully')));
+      if (groupProvider.currentGroup != null) {
+        groupId = groupProvider.currentGroup?.id;
+      }
 
       AuthItem authItem = AuthItem(
-          name: name, serviceName: "serviceName", secret: key, code: "");
+          name: name,
+          serviceName: "serviceName",
+          secret: key,
+          code: "",
+          groupId: groupId);
 
-      Provider.of<AuthItemProvider>(context, listen: false)
-          .createAuthItem(authItem);
+      authItemProvider.createAuthItem(authItem);
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Secret saved successfully')));
     }
   }
 

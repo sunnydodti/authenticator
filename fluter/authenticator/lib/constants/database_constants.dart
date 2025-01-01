@@ -3,8 +3,9 @@ class DatabaseConstants {
   final int databaseVersion = 1;
 
   CommonDBConstants get common => CommonDBConstants();
-
   AuthItemConstants get authItem => AuthItemConstants();
+
+  GroupConstants get group => GroupConstants();
 }
 
 class CommonDBConstants {
@@ -20,6 +21,23 @@ class AuthItemConstants {
   final String id = CommonDBConstants.id;
   final String name = "name";
 
-  // final String token = "token";
+  final String serviceName = "service_name";
+
   final String secret = "secret";
+  final String code = "code";
+
+  final String groupId = "group_id";
+}
+
+class GroupConstants {
+  final String table = "groups";
+  final String triggerModifiedAt = "update_modified_at_group";
+
+  final String id = CommonDBConstants.id;
+  final String name = "name";
+
+  final String parentId = "parent_id";
+  final String isLeaf = "is_leaf";
+
+  final int defaultGroupId = 1;
 }

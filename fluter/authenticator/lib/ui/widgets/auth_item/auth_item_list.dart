@@ -33,11 +33,14 @@ class _AuthItemListState extends State<AuthItemList> {
                           child: ListView.builder(
                               itemCount: provider.items.length,
                               itemBuilder: (context, index) {
+                                bool isSelected =
+                                    provider.selectedItems[index]!;
                                 ListItem item = provider.items[index];
                                 if (item.type == ListItemType.group) {
                                   return GroupTile(group: item.group!);
                                 }
-                                return AuthItemTile(authItem: item.authItem!);
+                                return buildAuthItemTile(
+                                    item, isSelected, index, provider);
                               })));
             },
           );
@@ -46,10 +49,41 @@ class _AuthItemListState extends State<AuthItemList> {
     );
   }
 
+  AuthItemTile buildAuthItemTile(
+      ListItem item, bool isSelected, int index, DataProvider provider) {
+    return AuthItemTile(
+      authItem: item.authItem!,
+      isSelected: isSelected,
+      onSelect: () => onItemSelect(index, provider),
+      onToggle: () => onItemToggle(index, provider, isSelected),
+      onTap: () => onItemToggle(index, provider, isSelected),
+    );
+  }
+
   Future<void> _refresh(BuildContext context, {bool notify = true}) async {
     // final provider = Provider.of<AuthItemProvider>(context, listen: false);
     // await provider.refresh(notify: notify);
     final provider = Provider.of<DataProvider>(context, listen: false);
     await provider.refresh(notify: notify);
+  }
+
+  void onItemSelect(int index, DataProvider provider) {
+    provider.updateSelectedItem(index, true);
+  }
+
+  void onItemUnSelect(int index, DataProvider provider) {
+    provider.updateSelectedItem(index, false);
+  }
+
+  void onItemToggle(int index, DataProvider provider, bool isSelected) {
+    isSelected
+        ? onItemUnSelect(index, provider)
+        : onItemSelect(index, provider);
+  }
+
+  void onItemTap(int index, DataProvider provider, bool isSelected) {
+    if (provider.isSelectionMode) {
+      onItemToggle(index, provider, isSelected);
+    }
   }
 }

@@ -61,6 +61,52 @@ class DataProvider extends ChangeNotifier {
     }
   }
 
+  bool _isSelectionMode = true;
+  Map<int, bool> _selectedItems = {};
+
+  bool get isSelectionMode => _isSelectionMode;
+
+  Map<int, bool> get selectedItems => _selectedItems;
+
+  void updateSelectedItem(int index, value) {
+    _selectedItems[index] = value;
+    if (value) {
+      _isSelectionMode = true;
+    } else {
+      toggleUpdateSelectionMode();
+    }
+    notifyListeners();
+  }
+
+  void toggleUpdateSelectionMode() {
+    bool isOneSelected = _selectedItems.values.any((element) => element);
+    if (!isOneSelected) {
+      _isSelectionMode = false;
+      notifyListeners();
+    }
+  }
+
+  void setIsSelectionMode(bool value) {
+    _isSelectionMode = value;
+    notifyListeners();
+  }
+
+  void clearSelected() {
+    setIsSelectionMode(false);
+    _setAll(false);
+  }
+
+  void selectAll() {
+    setIsSelectionMode(true);
+    _setAll(true);
+  }
+
+  void _setAll(bool value) {
+    for (var key in _selectedItems.keys) {
+      _selectedItems[key] = value;
+    }
+  }
+
   /// Add an authenticator item in memory (not DB)
   void addListItem(ListItem item) {
     _items.add(item);
@@ -103,9 +149,16 @@ class DataProvider extends ChangeNotifier {
     try {
       List<ListItem> items = await _getListItems();
       _items = items;
+      _initializeSelectedItems(items.length);
       if (notify) notifyListeners();
     } catch (e, stackTrace) {
       _logger.e('Error refreshing authenticator items: $e - \n$stackTrace');
+    }
+  }
+
+  void _initializeSelectedItems(int length) {
+    for (int i = 0; i < length; i++) {
+      _selectedItems[i] = false;
     }
   }
 

@@ -19,17 +19,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           return AppBar(
             leading: Center(
               child: Text(
-                "${provider.selectedItems.values.where((element) => element == true).length}",
+                "${provider.selectedItems.values.where((element) => element).length}",
               ),
             ),
-            actions: [
-              IconButton(
-                  onPressed: () => _clearSelected(provider),
-                  icon: Icon(Icons.drive_file_move_outlined)),
-              IconButton(
-                  onPressed: () {}, icon: Icon(Icons.select_all_outlined)),
-              IconButton(onPressed: () {}, icon: Icon(Icons.clear_outlined)),
-            ],
+            actions: buildSelectedActions(provider),
           );
         }
         return AppBar(
@@ -43,6 +36,26 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         );
       },
     );
+  }
+
+  List<Widget> buildSelectedActions(DataProvider provider) {
+    return [
+      IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.drive_file_move_outlined),
+        tooltip: "Move Selected",
+      ),
+      IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.select_all_outlined),
+        tooltip: "Select All",
+      ),
+      IconButton(
+        onPressed: () => _clearSelected(provider),
+        icon: Icon(Icons.clear_outlined),
+        tooltip: "Clear Selected",
+      ),
+    ];
   }
 
   void _clearSelected(DataProvider provider) {

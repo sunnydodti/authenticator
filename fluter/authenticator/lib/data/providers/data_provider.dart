@@ -61,7 +61,7 @@ class DataProvider extends ChangeNotifier {
     }
   }
 
-  bool _isSelectionMode = true;
+  bool _isSelectionMode = false;
   final Map<int, bool> _selectedItems = {};
 
   bool get isSelectionMode => _isSelectionMode;

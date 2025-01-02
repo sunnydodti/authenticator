@@ -37,7 +37,8 @@ class _AuthItemListState extends State<AuthItemList> {
                                     provider.selectedItems[index]!;
                                 ListItem item = provider.items[index];
                                 if (item.type == ListItemType.group) {
-                                  return GroupTile(group: item.group!);
+                                  return buildGroupTile(
+                                      item, isSelected, index, provider);
                                 }
                                 return buildAuthItemTile(
                                     item, isSelected, index, provider);
@@ -54,6 +55,18 @@ class _AuthItemListState extends State<AuthItemList> {
     return AuthItemTile(
       authItem: item.authItem!,
       isSelected: isSelected,
+      onSelect: () => onItemSelect(index, provider),
+      onToggle: () => onItemToggle(index, provider, isSelected),
+      onTap: () => onItemToggle(index, provider, isSelected),
+    );
+  }
+
+  GroupTile buildGroupTile(
+      ListItem item, bool isSelected, int index, DataProvider provider) {
+    return GroupTile(
+      group: item.group!,
+      isSelected: isSelected,
+      isSelectionMode: provider.isSelectionMode,
       onSelect: () => onItemSelect(index, provider),
       onToggle: () => onItemToggle(index, provider, isSelected),
       onTap: () => onItemToggle(index, provider, isSelected),

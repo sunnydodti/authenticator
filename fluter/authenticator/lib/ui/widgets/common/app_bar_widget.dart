@@ -49,7 +49,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         tooltip: "Move Selected",
       ),
       IconButton(
-        onPressed: () {},
+        onPressed: () => _selectAll(provider),
         icon: Icon(Icons.select_all_outlined),
         tooltip: "Select All",
       ),

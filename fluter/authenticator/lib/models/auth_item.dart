@@ -11,7 +11,7 @@ class AuthItem {
   final String? serviceName;
   final String secret;
   final String? code;
-  final int? groupId;
+  int? groupId;
 
   AuthItem({
     this.id,

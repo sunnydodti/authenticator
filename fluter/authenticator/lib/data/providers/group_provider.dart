@@ -1,3 +1,4 @@
+import 'package:authenticator/constants/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
@@ -18,19 +19,38 @@ class GroupProvider extends ChangeNotifier {
   }
 
   List<Group> _groups = [];
+  List<Group> groupStack = [];
+
+  Group? _currentGroup;
+
+  Group? get currentGroup => _currentGroup;
+
+  Future<void> setCurrentGroupById(int id) async {
+    GroupService service = await _groupService;
+    Group? group = await service.getGroupById(id);
+    _currentGroup = group;
+  }
 
   /// Get list of all groups
   List<Group> get groups => _groups;
 
+  void pushGroup(Group group, {bool refreshData = true}) {
+    _currentGroup = group;
+    groupStack.add(group);
+    if (refreshData) refreshSelected();
+  }
+
+  void popGroup({bool refreshData = true}) {
+    if (groupStack.isNotEmpty) {
+      groupStack.removeLast();
+      _currentGroup = (groupStack.isNotEmpty) ? groupStack.last : null;
+      if (refreshData) refreshSelected();
+    }
+  }
+
   /// Add an group item in memory (not DB)
   void addGroup(Group item) {
     _groups.add(item);
-    notifyListeners();
-  }
-
-  /// Insert an group at a specific index (not DB)
-  void insertGroup(int index, Group item) {
-    _groups.insert(index, item);
     notifyListeners();
   }
 
@@ -71,9 +91,11 @@ class GroupProvider extends ChangeNotifier {
   }
 
   /// Refresh groups from DB
-  Future<void> refreshGroupData(int id, {bool notify = true}) async {
+  Future<void> refreshSelected({bool notify = true}) async {
     try {
-      List<Group> items = await _getGroups();
+      int parentId = Constants.db.group.defaultGroupId;
+      if (_currentGroup != null) parentId = _currentGroup!.id!;
+      List<Group> items = await _getGroupsIn(parentId);
       _groups = items;
       if (notify) notifyListeners();
     } catch (e, stackTrace) {
@@ -85,6 +107,12 @@ class GroupProvider extends ChangeNotifier {
   Future<List<Group>> _getGroups() async {
     GroupService groupService = await _groupService;
     return await groupService.getGroups();
+  }
+
+  /// Fetch updated groups with parent from DB
+  Future<List<Group>> _getGroupsIn(int parentId) async {
+    GroupService groupService = await _groupService;
+    return await groupService.getGroupsIn(parentId);
   }
 
   /// create Auth Item in DB

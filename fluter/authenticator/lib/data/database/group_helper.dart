@@ -70,7 +70,7 @@ class GroupHelper {
     );
   }
 
-  Future<Map<String, dynamic>?> getGroupById(String id) async {
+  Future<Map<String, dynamic>?> getGroupById(int id) async {
     _logger.i("Getting group by ID: $id");
     Database database = getDatabase;
     final result = await database.query(

@@ -49,7 +49,7 @@ class GroupService {
     }
   }
 
-  Future<Group?> getGroupById(String id) async {
+  Future<Group?> getGroupById(int id) async {
     try {
       final groupMap = await _groupHelper.getGroupById(id);
       return groupMap != null ? Group.fromMap(groupMap) : null;

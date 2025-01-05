@@ -75,15 +75,15 @@ class AuthItemService {
     }
   }
 
-  // Future<int> updateAuthItem(AuthItem name) async {
-  //   try {
-  //     final result = await _authItemHelper.updateAuthItem(name);
-  //     return result;
-  //   } catch (e, stackTrace) {
-  //     _logger.e("Error updating auth_item - $e - \n$stackTrace");
-  //     return -1;
-  //   }
-  // }
+  Future<int> updateAuthItem(AuthItem authItem) async {
+    try {
+      final result = await _authItemHelper.updateAuthItem(authItem);
+      return result;
+    } catch (e, stackTrace) {
+      _logger.e("Error updating auth_item - $e - \n$stackTrace");
+      return -1;
+    }
+  }
 
   Future<int> deleteAuthItem(int id) async {
     try {

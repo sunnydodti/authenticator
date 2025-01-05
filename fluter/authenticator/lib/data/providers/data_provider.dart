@@ -68,6 +68,20 @@ class DataProvider extends ChangeNotifier {
 
   Map<int, bool> get selectedItems => _selectedItems;
 
+  int get selectedCount =>
+      _selectedItems.values.where((element) => element).length;
+
+  List<ListItem> getSelectedItems() {
+    List<ListItem> selectedItems = [];
+
+    _selectedItems.forEach(
+      (key, value) {
+        if (value) selectedItems.add(_items[key]);
+      },
+    );
+    return selectedItems;
+  }
+
   void updateSelectedItem(int index, value) {
     _selectedItems[index] = value;
     if (value) {
@@ -91,9 +105,10 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearSelected() {
+  void clearSelected({bool notify = false}) {
     setIsSelectionMode(false);
     _setAll(false);
+    if (notify) notifyListeners();
   }
 
   void selectAll() {
@@ -205,5 +220,36 @@ class DataProvider extends ChangeNotifier {
     groupStack = newStack;
     _currentGroup = group;
     refresh();
+  }
+
+  Future<bool> moveSelectedItems(Group? parent) async {
+    if (parent == null) return false;
+
+    bool isUpdated = false;
+
+    GroupService groupService = await _groupService;
+    AuthItemService authItemService = await _authItemService;
+
+    for (int key = 0; key < _selectedItems.length; key++) {
+      bool value = _selectedItems[key]!;
+      if (value) {
+        ListItem selected = _items[key];
+        switch (selected.type) {
+          case ListItemType.group:
+            {
+              selected.group!.parentId = parent.id;
+              await groupService.updateGroup(selected.group!);
+              isUpdated = true;
+            }
+          case ListItemType.authItem:
+            {
+              selected.authItem!.groupId = parent.id;
+              await authItemService.updateAuthItem(selected.authItem!);
+              isUpdated = true;
+            }
+        }
+      }
+    }
+    return isUpdated;
   }
 }

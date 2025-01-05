@@ -8,7 +8,7 @@ GroupConstants c = Constants.db.group;
 class Group {
   final int? id;
   final String name;
-  final int? parentId;
+  int? parentId;
   final bool isLeaf;
 
   Group({

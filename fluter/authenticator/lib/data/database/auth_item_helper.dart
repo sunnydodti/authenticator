@@ -2,6 +2,7 @@ import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../constants/constants.dart';
+import '../../models/auth_item.dart';
 
 class AuthItemHelper {
   final Database _database;
@@ -45,6 +46,17 @@ class AuthItemHelper {
     _logger.i("adding auth item");
     Database database = getDatabase;
     return await database.insert(Constants.db.authItem.table, authItemMap);
+  }
+
+  Future<int> updateAuthItem(AuthItem authItem) async {
+    _logger.i("updating auth item ${authItem.name}");
+    Database database = getDatabase;
+    return await database.update(
+      Constants.db.authItem.table,
+      authItem.toMap(),
+      where: "${Constants.db.authItem.id} = ?",
+      whereArgs: [authItem.id],
+    );
   }
 
   Future<List<Map<String, dynamic>>> getAuthItems() async {

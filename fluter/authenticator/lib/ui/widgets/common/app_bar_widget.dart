@@ -1,5 +1,7 @@
 import 'package:authenticator/data/providers/data_provider.dart';
+import 'package:authenticator/data/providers/group_provider.dart';
 import 'package:authenticator/ui/widgets/group/add_group_button.dart';
+import 'package:authenticator/ui/widgets/group/group_browser.dart';
 import 'package:authenticator/ui/widgets/refresh_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,10 +21,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           return AppBar(
             leading: Center(
               child: Text(
-                "${provider.selectedItems.values.where((element) => element).length}",
+                "${provider.selectedCount}",
               ),
             ),
-            actions: buildSelectedActions(provider),
+            actions: buildSelectedActions(context, provider),
           );
         }
         return AppBar(
@@ -38,10 +40,11 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  List<Widget> buildSelectedActions(DataProvider provider) {
+  List<Widget> buildSelectedActions(
+      BuildContext context, DataProvider provider) {
     return [
       IconButton(
-        onPressed: () {},
+        onPressed: () => moveItems(context, provider),
         icon: Icon(Icons.drive_file_move_outlined),
         tooltip: "Move Selected",
       ),
@@ -56,6 +59,67 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         tooltip: "Clear Selected",
       ),
     ];
+  }
+
+  void moveItems(BuildContext context, DataProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        int count = provider.selectedCount;
+        String title = buildTitle(count);
+        return AlertDialog(
+          title: Text(title),
+          content: SizedBox(
+            height: 500,
+            width: 500,
+            child: GroupBrowser(
+              parentId: Constants.db.group.defaultGroupId,
+              selectedItems: provider.getSelectedItems(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel"),
+            ),
+            buildMoveButton(context)
+          ],
+        );
+      },
+    );
+  }
+
+  Consumer<GroupProvider> buildMoveButton(BuildContext context) {
+    DataProvider dataProvider =
+        Provider.of<DataProvider>(context, listen: false);
+
+    return Consumer<GroupProvider>(
+        builder: (BuildContext context, GroupProvider provider, Widget? child) {
+      String message = "Move Here";
+      if (provider.currentGroup != null) {
+        message = "Move to ${provider.currentGroup!.name}";
+      }
+      return TextButton(
+          child: Text(message),
+          onPressed: () async {
+            await dataProvider.moveSelectedItems(provider.currentGroup).then(
+              (result) {
+                if (result) {
+                  dataProvider.clearSelected();
+                  dataProvider.refresh();
+                }
+                Navigator.pop(context);
+              },
+            );
+          });
+    });
+  }
+
+  String buildTitle(int count) {
+    String title = "Moving";
+    title += " $count Item";
+    if (count > 1) title += "s";
+    return title;
   }
 
   void _clearSelected(DataProvider provider) {

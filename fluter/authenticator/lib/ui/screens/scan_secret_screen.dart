@@ -1,10 +1,15 @@
+import 'package:authenticator/data/providers/auth_item_provider.dart';
+import 'package:authenticator/data/providers/data_provider.dart';
+import 'package:authenticator/models/auth_item.dart';
 import 'package:authenticator/models/otp_config.dart';
 import 'package:authenticator/services/otp/otp_service.dart';
 import 'package:authenticator/ui/helpers/platform_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 
+import '../../constants/constants.dart';
 import '../../tools/logger.dart';
 import '../helpers/navigation_helper.dart';
 
@@ -16,6 +21,12 @@ class ScanSecretScreen extends StatefulWidget {
 }
 
 class _ScanSecretScreenState extends State<ScanSecretScreen> {
+  AuthItemProvider get authItemProvider =>
+      Provider.of<AuthItemProvider>(context, listen: false);
+
+  DataProvider get dataProvider =>
+      Provider.of<DataProvider>(context, listen: false);
+
   final isCameraSupported = PlatformHelper.isCameraSupported;
   final OtpService otpService = OtpService();
   final Logger logger = Log.logger;
@@ -24,6 +35,8 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
   String scanStatus = "Scanning For Qr Code";
 
   String config = "";
+
+  int groupId = Constants.db.group.defaultGroupId;
 
   @override
   void dispose() {
@@ -68,7 +81,27 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
             ));
   }
 
-  void _onScanSuccess(Code? code) {
+  addAuthItemFromConfig(OTPConfig config) async {
+    AuthItem authItem = AuthItem(
+        name: config.account,
+        serviceName: config.issuer,
+        secret: config.secret,
+        code: "",
+        groupId: groupId);
+
+    int result = await authItemProvider.createAuthItem(authItem);
+    String message = 'Secret saved successfully';
+    if (result < 0) message = "Couldn't add account";
+
+    if (mounted) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
+      dataProvider.refresh(notify: true);
+      Navigator.pop(context);
+    }
+  }
+
+  void _onScanSuccess(Code? code) async {
     setState(() {
       result = code;
       scanStatus = "Scan Successful";
@@ -77,6 +110,7 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
     try {
       OTPConfig otpConfig = otpService.parseOTPConfig("${code?.text}");
       print(otpConfig.toString());
+      await addAuthItemFromConfig(otpConfig);
     } catch (e, stackTrace) {
       logger.e("Error parsing uri: $e - \n$stackTrace");
       setState(() {

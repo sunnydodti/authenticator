@@ -22,7 +22,7 @@ class AuthItemHelper {
       await database.execute('''CREATE TABLE ${Constants.db.authItem.table} (
         ${Constants.db.authItem.id} INTEGER PRIMARY KEY AUTOINCREMENT,
         ${Constants.db.authItem.name} TEXT,
-        ${Constants.db.authItem.secret} TEXT UNIQUE,
+        ${Constants.db.authItem.secret} TEXT,
         ${Constants.db.authItem.groupId} INTEGER DEFAULT ${Constants.db.group.table},
         ${Constants.db.common.createdAt} TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         ${Constants.db.common.modifiedAt} TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -118,13 +118,11 @@ class GroupService {
 
 
   /// create a new group with/without parent
-  Future<int> createNewGroup(String name, int parentId,
-      {bool isLeaf = true}) async {
+  Future<int> createNewGroup(String name, int parentId) async {
     try {
       Group group = Group(
         id: -1,
         name: name,
-        isLeaf: isLeaf,
         parentId: parentId,
       );
       final result = await _groupHelper.addGroup(group.toMap());

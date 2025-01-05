@@ -40,7 +40,6 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
       int result = await groupProvider.createNewGroup(
         nameController.text,
         parentId,
-        isLeaf: true,
       );
       String message = "Group not created";
       if (result > 0) {

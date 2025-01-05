@@ -122,10 +122,9 @@ class GroupProvider extends ChangeNotifier {
   }
 
   /// create Auth Item in DB
-  Future<int> createNewGroup(String name, int parentId,
-      {bool isLeaf = true}) async {
+  Future<int> createNewGroup(String name, int parentId) async {
     GroupService service = await _groupService;
-    var result = await service.createNewGroup(name, parentId, isLeaf: isLeaf);
+    var result = await service.createNewGroup(name, parentId);
 
     if (result > 0) return result;
     return -1;

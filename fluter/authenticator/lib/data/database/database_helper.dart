@@ -28,7 +28,7 @@ class DatabaseHelper {
   Future<Database> initializeDatabase() async {
     final Directory directory = await getApplicationDocumentsDirectory();
     String path = '${directory.path}/${Constants.db.databaseName}';
-    // await deleteDatabase(path);
+    await deleteDatabase(path);
     return await openDatabase(
       path,
       version: Constants.db.databaseVersion,

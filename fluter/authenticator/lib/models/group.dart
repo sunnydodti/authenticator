@@ -9,26 +9,22 @@ class Group {
   final int? id;
   final String name;
   int? parentId;
-  final bool isLeaf;
 
   Group({
     required this.id,
     required this.name,
     this.parentId,
-    required this.isLeaf,
   });
 
   Group copyWith({
     int? id,
     String? name,
     int? parentId,
-    bool? isLeaf,
   }) {
     return Group(
       id: id ?? this.id,
       name: name ?? this.name,
       parentId: parentId ?? this.parentId,
-      isLeaf: isLeaf ?? this.isLeaf,
     );
   }
 
@@ -38,7 +34,6 @@ class Group {
       if (id != null && id != -1) c.id: id,
       c.name: name,
       c.parentId: parentId,
-      c.isLeaf: _parseBoolAsInt(isLeaf),
     };
   }
 
@@ -47,7 +42,6 @@ class Group {
       id: map[c.id] as int,
       name: map[c.name] as String,
       parentId: map[c.parentId] != null ? map[c.parentId] as int : null,
-      isLeaf: _parseIntAsBool(map[c.isLeaf]),
     );
   }
 
@@ -67,7 +61,7 @@ class Group {
 
   @override
   String toString() {
-    return 'Group(${c.id}: $id, ${c.name}: $name, ${c.parentId}: $parentId, ${c.isLeaf}: $isLeaf)';
+    return 'Group(${c.id}: $id, ${c.name}: $name, ${c.parentId}: $parentId)';
   }
 
   @override
@@ -75,13 +69,11 @@ class Group {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.name == name &&
-        other.parentId == parentId &&
-        other.isLeaf == isLeaf;
+        other.name == name && other.parentId == parentId;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ parentId.hashCode ^ isLeaf.hashCode;
+    return id.hashCode ^ name.hashCode ^ parentId.hashCode;
   }
 }

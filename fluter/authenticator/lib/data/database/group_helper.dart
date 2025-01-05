@@ -24,7 +24,8 @@ class GroupHelper {
           ${Constants.db.group.id} INTEGER PRIMARY KEY AUTOINCREMENT, 
           ${Constants.db.group.name} TEXT NOT NULL,
           ${Constants.db.group.parentId} INTEGER,
-          ${Constants.db.group.isLeaf} INTEGER DEFAULT 1
+          ${Constants.db.common.createdAt} TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          ${Constants.db.common.modifiedAt} TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
       ''');
 
@@ -41,9 +42,7 @@ class GroupHelper {
 
       _logger.i("adding default group");
       Group defaultGroup = Group(
-          id: Constants.db.group.defaultGroupId,
-          name: "default",
-          isLeaf: false);
+          id: Constants.db.group.defaultGroupId, name: "default");
       await database.insert(Constants.db.group.table, defaultGroup.toMap());
     }
   }

@@ -37,7 +37,6 @@ class GroupConstants {
   final String name = "name";
 
   final String parentId = "parent_id";
-  final String isLeaf = "is_leaf";
 
   final int defaultGroupId = 1;
 }

@@ -1,3 +1,4 @@
+import 'package:authenticator/enums/list_item_type.dart';
 import 'package:authenticator/models/list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class _GroupBrowserState extends State<GroupBrowser> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _refresh(context, widget.parentId),
+      future: _refresh(context, widget.parentId, widget.selectedItems),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return Consumer<GroupProvider>(
           builder: (context, provider, child) {
@@ -58,10 +59,18 @@ class _GroupBrowserState extends State<GroupBrowser> {
     );
   }
 
-  Future<void> _refresh(BuildContext context, int parentId,
+  Future<void> _refresh(
+      BuildContext context, int parentId, List<ListItem> selectedItems,
       {bool notify = true}) async {
     final provider = Provider.of<GroupProvider>(context, listen: false);
     await provider.setCurrentGroupById(parentId);
-    await provider.refreshSelected(notify: notify);
+    Iterable<ListItem> selectedGroupItems =
+        selectedItems.where((e) => e.type == ListItemType.group);
+    List<Group> selectedGroups = [];
+    for (var element in selectedGroupItems) {
+      selectedGroups.add(element.group!);
+    }
+    await provider.setSelectedGroups(selectedGroups);
+    await provider.refreshSelected(notify: notify, skipSelected: true);
   }
 }

@@ -20,6 +20,7 @@ class GroupProvider extends ChangeNotifier {
 
   List<Group> _groups = [];
   List<Group> groupStack = [];
+  List<Group> _selectedGroups = [];
 
   Group? _currentGroup;
 
@@ -29,6 +30,10 @@ class GroupProvider extends ChangeNotifier {
     GroupService service = await _groupService;
     Group? group = await service.getGroupById(id);
     _currentGroup = group;
+  }
+
+  Future<void> setSelectedGroups(List<Group> selectedGroups) async {
+    _selectedGroups = selectedGroups;
   }
 
   /// Get list of all groups
@@ -91,11 +96,17 @@ class GroupProvider extends ChangeNotifier {
   }
 
   /// Refresh groups from DB
-  Future<void> refreshSelected({bool notify = true}) async {
+  Future<void> refreshSelected(
+      {bool notify = true, bool skipSelected = true}) async {
     try {
       int parentId = Constants.db.group.defaultGroupId;
       if (_currentGroup != null) parentId = _currentGroup!.id!;
       List<Group> items = await _getGroupsIn(parentId);
+      if (skipSelected) {
+        for (Group group in _selectedGroups) {
+          items.removeWhere((element) => element.id == group.id);
+        }
+      }
       _groups = items;
       if (notify) notifyListeners();
     } catch (e, stackTrace) {

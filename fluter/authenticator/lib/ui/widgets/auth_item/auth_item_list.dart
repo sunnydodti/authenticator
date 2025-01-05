@@ -57,7 +57,9 @@ class _AuthItemListState extends State<AuthItemList> {
       isSelected: isSelected,
       onSelect: () => onItemSelect(index, provider),
       onToggle: () => onItemToggle(index, provider, isSelected),
-      onTap: () => onItemToggle(index, provider, isSelected),
+      onTap: () {
+        if (provider.isSelectionMode) onItemToggle(index, provider, isSelected);
+      },
     );
   }
 

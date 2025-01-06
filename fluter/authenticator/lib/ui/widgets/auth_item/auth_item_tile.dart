@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/auth_item.dart';
 import '../../../services/otp/totp.dart';
+import 'otp_progress_bar.dart';
 
 class AuthItemTile extends StatefulWidget {
   final AuthItem authItem;
@@ -30,36 +31,31 @@ class AuthItemTileState extends State<AuthItemTile> {
   late String _otpCode;
   late TOTP totp = TOTP("", digits: 6);
 
+  final int epochInterval = 30000;
+
   @override
   void initState() {
     super.initState();
+    totp = TOTP(widget.authItem.secret);
     _generateOtp();
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      _updateProgress();
-    });
+    final int currentEpochTime = DateTime.now().millisecondsSinceEpoch;
+    final int nextEpochTime =
+        ((currentEpochTime ~/ epochInterval) + 1) * epochInterval;
+    final Duration initialDelay =
+        Duration(milliseconds: nextEpochTime - currentEpochTime);
 
-    totp = TOTP(widget.authItem.secret);
-    _otpCode = totp.now();
+    _timer = Timer(initialDelay, () {
+      _generateOtp();
+      _timer = Timer.periodic(Duration(milliseconds: epochInterval), (_) {
+        _generateOtp();
+      });
+    });
   }
 
   void _generateOtp() {
     setState(() {
       _otpCode = totp.now();
-    });
-  }
-
-  double _getProgress() {
-    int currentSeconds = DateTime.now().second;
-    double progress = (currentSeconds % 30) / 30;
-    return 1 - progress;
-  }
-
-  void _updateProgress() {
-    setState(() {
-      if (_getProgress() > 0.94) {
-        _generateOtp();
-      }
     });
   }
 
@@ -71,6 +67,9 @@ class AuthItemTileState extends State<AuthItemTile> {
 
   @override
   Widget build(BuildContext context) {
+    final int currentEpochTime = DateTime.now().millisecondsSinceEpoch;
+    final int elapsedTime = currentEpochTime % epochInterval;
+
     Color color = Colors.transparent;
     if (widget.isSelected) color = Colors.blue.withAlpha(50);
     return Container(
@@ -85,17 +84,18 @@ class AuthItemTileState extends State<AuthItemTile> {
           children: [
             Text('OTP: $_otpCode', style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 5),
-            LinearProgressIndicator(
-              value: _getProgress(),
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            OtpProgressBar(
+              backgroundColor: Colors.white,
+              progressColor: Colors.blue,
+              totalDuration: Duration(milliseconds: epochInterval),
+              elapsedDuration: Duration(milliseconds: elapsedTime),
             ),
           ],
         ),
         trailing: widget.isSelected
             ? IconButton(
                 onPressed: widget.onToggle,
-                icon: Icon(Icons.check_box),
+                icon: const Icon(Icons.check_box),
               )
             : IconButton(
                 icon: const Icon(Icons.refresh),

@@ -53,7 +53,7 @@ class AddSecretScreenState extends State<AddSecretScreen> {
       final keyType = _selectedKeyType;
       int groupId = Constants.db.group.defaultGroupId;
 
-      logger.i('Name: $name, Key: $key, Key Type: $keyType');
+      logger.i('Name: $name, Key Type: $keyType');
 
       if (!otpService.isValidSecret(key)) {
         SnackbarService.showSnackBar('Invalid Base32 Key');

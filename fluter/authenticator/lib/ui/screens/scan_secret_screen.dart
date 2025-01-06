@@ -35,8 +35,6 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
   Code? result;
   String scanStatus = "Scanning For Qr Code";
 
-  String config = "";
-
   int groupId = Constants.db.group.defaultGroupId;
 
   @override
@@ -58,9 +56,8 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
         child: Column(
           children: [
             buildScanner(),
-            if (result != null) buildResult(),
+            // if (result != null) buildResult(),
             Text(scanStatus),
-            Text("config: $config"),
             Row()
           ],
         ),
@@ -73,10 +70,11 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
         ? Center(child: Text("Camera Not Supported"))
         : SizedBox(
             width: 300,
-            height: 300,
+            height: 350,
             child: ReaderWidget(
               onScan: _onScanSuccess,
               onScanFailure: _onScanFailure,
+              actionButtonsAlignment: Alignment.bottomCenter,
               toggleCameraIcon: Icon(Icons.swap_horizontal_circle_outlined),
               galleryIcon: Icon(Icons.photo_library_outlined),
             ));
@@ -107,7 +105,7 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
     });
     try {
       OTPConfig otpConfig = otpService.parseOTPConfig("${code?.text}");
-      print(otpConfig.toString());
+      // print(otpConfig.toString());
       await addAuthItemFromConfig(otpConfig);
     } catch (e, stackTrace) {
       logger.e("Error parsing uri: $e - \n$stackTrace");

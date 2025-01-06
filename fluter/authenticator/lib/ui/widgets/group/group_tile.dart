@@ -47,7 +47,7 @@ class _GroupTileState extends State<GroupTile> {
         selected: widget.isSelected,
         onLongPress: widget.onSelect,
         onTap: onTap,
-        leading: const Icon(Icons.folder),
+        leading: const Icon(Icons.folder_outlined),
         title: Text(widget.group.name),
         trailing: widget.isSelected
             ? IconButton(

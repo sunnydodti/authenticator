@@ -13,13 +13,13 @@ jobs:
     steps:
 
       - name: 'clone repository'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 'flutter get - test - build'
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.7.3
+          flutter-version-file: fluter/authenticator/pubspec.yaml
 
       - run: cd fluter/authenticator && flutter pub get
       

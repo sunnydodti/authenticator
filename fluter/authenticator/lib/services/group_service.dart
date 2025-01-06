@@ -79,7 +79,7 @@ class GroupService {
     }
   }
 
-  Future<int> deleteGroup(String id) async {
+  Future<int> deleteGroup(int id) async {
     try {
       final result = await _groupHelper.deleteGroupById(id);
       return result;

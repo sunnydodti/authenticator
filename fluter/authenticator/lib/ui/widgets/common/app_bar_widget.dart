@@ -58,6 +58,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         icon: Icon(Icons.clear_outlined),
         tooltip: "Clear Selected",
       ),
+      SizedBox(width: 20),
+      IconButton(
+        onPressed: () => _deleteSelected(provider),
+        icon: Icon(Icons.delete_outline),
+        tooltip: "Delete Selected",
+      ),
     ];
   }
 
@@ -124,6 +130,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   void _clearSelected(DataProvider provider) {
     provider.clearSelected();
+  }
+
+  void _deleteSelected(DataProvider provider) async {
+    int result = await provider.deleteSelected();
+    if (result > 0){
+    }
   }
 
   void _selectAll(DataProvider provider) {

@@ -122,6 +122,36 @@ class DataProvider extends ChangeNotifier {
     }
   }
 
+  Future<int> deleteSelected({bool notify = true}) async {
+    int deletedCount = 0;
+
+    GroupService groupService = await _groupService;
+    AuthItemService authItemService = await _authItemService;
+
+    for (int i = 0; i < _items.length; i++) {
+      if (_selectedItems[i]! == false) continue;
+
+      ListItem item = _items[i];
+      switch (item.type) {
+        case ListItemType.group:
+          if (await groupService.deleteGroup(item.group!.id!) != -1) {
+            deletedCount += 1;
+            break;
+          }
+        case ListItemType.authItem:
+          if (await authItemService.deleteAuthItem(item.authItem!.id!) != -1) {
+            deletedCount += 1;
+            break;
+          }
+      }
+    }
+
+    setIsSelectionMode(false);
+    _setAll(false);
+    refresh();
+    return deletedCount;
+  }
+
   /// Add an authenticator item in memory (not DB)
   void addListItem(ListItem item) {
     _items.add(item);

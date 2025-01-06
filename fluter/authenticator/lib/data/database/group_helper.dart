@@ -80,7 +80,7 @@ class GroupHelper {
     return result.isNotEmpty ? result.first : null;
   }
 
-  Future<int> deleteGroupById(String id) async {
+  Future<int> deleteGroupById(int id) async {
     _logger.i("Deleting group by ID: $id");
     Database database = getDatabase;
     return await database.delete(

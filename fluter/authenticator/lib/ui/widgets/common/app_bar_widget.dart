@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/constants.dart';
+import '../../notifications/snackbar_service.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -134,7 +135,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   void _deleteSelected(DataProvider provider) async {
     int result = await provider.deleteSelected();
-    if (result > 0){
+    if (result > 0) {
+      String text = "item";
+      if (result > 1) text += "s";
+      SnackbarService.showSnackBar("$result $text deleted");
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:authenticator/constants/constants.dart';
 import 'package:authenticator/data/providers/group_provider.dart';
+import 'package:authenticator/ui/notifications/snackbar_service.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -55,8 +56,7 @@ class AddSecretScreenState extends State<AddSecretScreen> {
       logger.i('Name: $name, Key: $key, Key Type: $keyType');
 
       if (!otpService.isValidSecret(key)) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Invalid Base32 Key')));
+        SnackbarService.showSnackBar('Invalid Base32 Key');
         return;
       }
 
@@ -80,12 +80,10 @@ class AddSecretScreenState extends State<AddSecretScreen> {
       String message = 'Secret saved successfully';
       if (result < 0) message = "Couldn't add account";
 
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(message)));
-        dataProvider.refresh(notify: true);
-        Navigator.pop(context);
-      }
+      SnackbarService.showSnackBar(message);
+      dataProvider.refresh(notify: true);
+
+      if (mounted) Navigator.pop(context);
     }
   }
 

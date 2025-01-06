@@ -1,3 +1,4 @@
+import 'package:authenticator/ui/notifications/snackbar_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,11 +47,8 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
         message = "Group created";
         dataProvider.refresh(notify: true);
       }
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(message)));
-      }
 
+      SnackbarService.showSnackBar(message);
       defaultOnTap();
     }
     return false;

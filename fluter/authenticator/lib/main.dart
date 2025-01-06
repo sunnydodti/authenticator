@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'data/providers/auth_item_provider.dart';
 import 'data/providers/group_provider.dart';
+import 'globals.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => GroupProvider()),
       ],
       child: MaterialApp(
+        scaffoldMessengerKey: snackbarKey,
         title: 'Authenticator',
         theme: ThemeData(
           brightness: Brightness.dark,

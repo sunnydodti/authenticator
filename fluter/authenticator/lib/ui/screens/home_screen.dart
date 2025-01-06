@@ -1,5 +1,6 @@
 import 'package:authenticator/data/providers/data_provider.dart';
 import 'package:authenticator/ui/helpers/navigation_helper.dart';
+import 'package:authenticator/ui/notifications/snackbar_service.dart';
 import 'package:authenticator/ui/widgets/add_auth_item_button.dart';
 import 'package:authenticator/ui/widgets/auth_item/auth_item_list.dart';
 import 'package:authenticator/ui/widgets/breadcrumbs.dart';
@@ -43,8 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void handelPop(didPop, result) {
     if (dataProvider.isAtRoot) {
       setState(() => dataProvider.canPop = true);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Press back again to exit')));
+      SnackbarService.showSnackBar('Press back again to exit');
       return;
     }
 

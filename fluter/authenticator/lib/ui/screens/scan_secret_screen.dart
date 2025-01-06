@@ -4,6 +4,7 @@ import 'package:authenticator/models/auth_item.dart';
 import 'package:authenticator/models/otp_config.dart';
 import 'package:authenticator/services/otp/otp_service.dart';
 import 'package:authenticator/ui/helpers/platform_helper.dart';
+import 'package:authenticator/ui/notifications/snackbar_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:logger/logger.dart';
@@ -93,12 +94,10 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
     String message = 'Secret saved successfully';
     if (result < 0) message = "Couldn't add account";
 
-    if (mounted) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
-      dataProvider.refresh(notify: true);
-      Navigator.pop(context);
-    }
+    SnackbarService.showSnackBar(message);
+    dataProvider.refresh(notify: true);
+
+    if (mounted) Navigator.pop(context);
   }
 
   void _onScanSuccess(Code? code) async {
@@ -106,7 +105,6 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
       result = code;
       scanStatus = "Scan Successful";
     });
-    bool isValid = false;
     try {
       OTPConfig otpConfig = otpService.parseOTPConfig("${code?.text}");
       print(otpConfig.toString());

@@ -29,5 +29,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with: 
           artifacts: fluter/authenticator/build/app/outputs/apk/release/*.apk
-          tag: v0.0.${{ github.run_number }}-alpha
+          tag: v0.0.1-alpha
           token: ${{ secrets.RELEASE_TOKEN }}

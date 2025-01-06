@@ -29,6 +29,7 @@ class _BreadcrumbsState extends State<Breadcrumbs> {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     }
   }
+
   @override
   void dispose() {
     _scrollController.dispose();

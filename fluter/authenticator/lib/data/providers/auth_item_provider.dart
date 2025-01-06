@@ -7,7 +7,7 @@ import '../../services/auth_item_service.dart';
 class AuthItemProvider extends ChangeNotifier {
   late final Future<AuthItemService> _authItemService;
   static final Logger _logger =
-  Logger(printer: SimplePrinter(), level: Level.info);
+      Logger(printer: SimplePrinter(), level: Level.info);
 
   AuthItemProvider() {
     _init();

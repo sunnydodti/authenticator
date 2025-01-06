@@ -1,4 +1,4 @@
-package com.sunnydodti.authenticator.authenticator
+package com.sunnydodti.authenticator
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -3,6 +3,7 @@ class DatabaseConstants {
   final int databaseVersion = 1;
 
   CommonDBConstants get common => CommonDBConstants();
+
   AuthItemConstants get authItem => AuthItemConstants();
 
   GroupConstants get group => GroupConstants();

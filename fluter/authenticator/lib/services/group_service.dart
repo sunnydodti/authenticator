@@ -116,7 +116,6 @@ class GroupService {
   //   }
   // }
 
-
   /// create a new group with/without parent
   Future<int> createNewGroup(String name, int parentId) async {
     try {

@@ -29,7 +29,6 @@ class Group {
   }
 
   Map<String, dynamic> toMap() {
-
     return <String, dynamic>{
       if (id != null && id != -1) c.id: id,
       c.name: name,
@@ -53,7 +52,6 @@ class Group {
     return value ? 1 : 0;
   }
 
-
   String toJson() => json.encode(toMap());
 
   factory Group.fromJson(String source) =>
@@ -68,8 +66,7 @@ class Group {
   bool operator ==(covariant Group other) {
     if (identical(this, other)) return true;
 
-    return other.id == id &&
-        other.name == name && other.parentId == parentId;
+    return other.id == id && other.name == name && other.parentId == parentId;
   }
 
   @override

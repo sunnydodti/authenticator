@@ -1,7 +1,6 @@
 import 'package:authenticator/models/otp_config.dart';
 
 import '../../enums/otp_type.dart';
-import '../../models/auth_item.dart';
 import 'totp.dart';
 
 class OtpService {
@@ -65,7 +64,7 @@ class OtpService {
     );
   }
 
-  bool isValidSecret(String secret){
+  bool isValidSecret(String secret) {
     TOTP totp = TOTP(secret, digits: 6);
     try {
       var a = totp.now();

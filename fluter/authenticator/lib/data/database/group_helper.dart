@@ -41,8 +41,8 @@ class GroupHelper {
       ''');
 
       _logger.i("adding default group");
-      Group defaultGroup = Group(
-          id: Constants.db.group.defaultGroupId, name: "default");
+      Group defaultGroup =
+          Group(id: Constants.db.group.defaultGroupId, name: "default");
       await database.insert(Constants.db.group.table, defaultGroup.toMap());
     }
   }

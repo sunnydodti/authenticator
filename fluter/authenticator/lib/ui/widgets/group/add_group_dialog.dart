@@ -18,6 +18,7 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
 
   String title = "Create new group";
   String subTitle = "";
+
   GroupProvider get groupProvider =>
       Provider.of<GroupProvider>(context, listen: false);
 

@@ -9,7 +9,8 @@ class AddGroupButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthItemProvider>(builder: (context, value, child) {
+    return Consumer<AuthItemProvider>(
+      builder: (context, value, child) {
         return IconButton(
           onPressed: () => showAddGroupForm(context),
           icon: Icon(Icons.create_new_folder_outlined),
@@ -19,7 +20,7 @@ class AddGroupButton extends StatelessWidget {
     );
   }
 
-  void showAddGroupForm(BuildContext context){
+  void showAddGroupForm(BuildContext context) {
     showDialog<int>(
       context: context,
       builder: (BuildContext context) {

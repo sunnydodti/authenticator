@@ -105,7 +105,10 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
     });
     try {
       OTPConfig otpConfig = otpService.parseOTPConfig("${code?.text}");
-      // print(otpConfig.toString());
+      if (!otpService.isValidSecret(otpConfig.secret)) {
+        SnackbarService.showSnackBar('Invalid QR Code');
+        return;
+      }
       await addAuthItemFromConfig(otpConfig);
     } catch (e, stackTrace) {
       logger.e("Error parsing uri: $e - \n$stackTrace");

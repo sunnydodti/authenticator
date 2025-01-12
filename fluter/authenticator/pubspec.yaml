@@ -12,6 +12,7 @@ dependencies:
   base32: ^2.0.4
   crypto: ^3.0.5
   cupertino_icons: ^1.0.8
+  device_info_plus: ^11.2.0
   flutter:
     sdk: flutter
   flutter_zxing: ^1.7.0

@@ -7,7 +7,7 @@ import 'base/models/flavour_values.dart';
 
 void main() {
   FlavorConfig(
-      flavor: Flavor.PRD,
+      flavor: Flavor.DEV,
       color: Colors.blue,
       values: FlavorValues(baseUrl: "https://sunnydodti.com/dev"));
   runApp(const AuthenticatorApp());

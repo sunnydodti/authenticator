@@ -1,0 +1,109 @@
+name: "Authenticator ALPHA CI"
+on:
+  push:
+    branches:
+      - alpha
+
+jobs:
+  build-info:
+    runs-on: ubuntu-latest
+    outputs:
+      app-version: ${{ steps.set_version.outputs.app_version }}
+    env:
+      FLUTTER_BASE: "flutter/authenticator"
+      FLAVOUR: alpha
+
+    steps:
+      - name: "Clone repository"
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: "Checkout workflows repo"
+        uses: actions/checkout@v4
+        with:
+          repository: sunnydodti/workflows
+          token: ${{ secrets.BUILD_INFO_TOKEN }}
+          path: workflows
+          ref: main
+
+      - name: "Get App Version"
+        id: get_version
+        run: |
+          chmod +x workflows/scripts/android/get-app-version.sh
+          workflows/scripts/android/get-app-version.sh "$FLUTTER_BASE"
+
+      - name: "Set App Version"
+        id: "set_version"
+        run: echo "app_version=$APP_VERSION-$FLAVOUR" >> $GITHUB_OUTPUT
+
+  build-android:
+    if: ${{ github.ref_name == 'alpha' }}
+    needs: build-info
+    runs-on: ubuntu-latest
+    env:
+      FLAVOUR: alpha
+      MAIN_FILE: main.dart
+      FLUTTER_BASE: "flutter/authenticator"
+
+    steps:
+      - name: "Clone repository"
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: "Checkout workflows repo"
+        uses: actions/checkout@v4
+        with:
+          repository: sunnydodti/workflows
+          token: ${{ secrets.BUILD_INFO_TOKEN }}
+          path: workflows
+          ref: main
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: "temurin"
+
+      - name: "Set up Flutter"
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version-file: ${{ env.FLUTTER_BASE }}/pubspec.yaml
+
+      - run: tree
+      - name: "setup android sdk"
+        run: |
+          chmod +x workflows/scripts/android/setup-android-sdk.sh
+          workflows/scripts/android/setup-android-sdk.sh
+
+      - name: "decode keystore"
+        run: |
+          chmod +x workflows/scripts/decode-keystore.sh
+          workflows/scripts/decode-keystore.sh "${{ secrets.KEYSTORE }}"
+
+      - name: "build apk"
+        run: |
+          chmod +x workflows/scripts/android/build-apk.sh
+          workflows/scripts/android/build-apk.sh "$FLUTTER_BASE" "$FLAVOUR" "$MAIN_FILE"
+
+      - name: "sign apk"
+        run: |
+          chmod +x workflows/scripts/android/sign-apk.sh
+          workflows/scripts/android/sign-apk.sh "$FLUTTER_BASE" "-$FLAVOUR" "${{ secrets.KEYSTORE_PASSWORD }}" "${{ secrets.KEY_ALIAS }}" "${{ secrets.KEY_PASSWORD }}"
+
+      - name: "rename apk"
+        run: |
+          chmod +x workflows/scripts/android/rename-apk.sh
+          workflows/scripts/android/rename-apk.sh "$FLUTTER_BASE" "${{ vars.APP_NAME }}" "-$FLAVOUR" "${{ needs.build-info.outputs.app-version }}"
+
+      - run: tree
+
+      - name: "Release"
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ env.FLUTTER_BASE }}/build/app/outputs/flutter-apk/*.apk
+          tag: "v${{ needs.build-info.outputs.app-version}}+${{github.run_number}}.${{ github.run_attempt }}"
+          token: ${{ secrets.RELEASE_TOKEN }}
+          prerelease: true

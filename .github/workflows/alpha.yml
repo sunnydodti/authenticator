@@ -2,7 +2,7 @@ name: "Authenticator ALPHA CI"
 on:
   push:
     branches:
-      - alpha
+      - main
 
 jobs:
   build-info:
@@ -38,7 +38,7 @@ jobs:
         run: echo "app_version=$APP_VERSION-$FLAVOUR" >> $GITHUB_OUTPUT
 
   build-android:
-    if: ${{ github.ref_name == 'alpha' }}
+    if: ${{ github.ref_name == 'main' }}
     needs: build-info
     runs-on: ubuntu-latest
     env:

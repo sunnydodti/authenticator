@@ -10,7 +10,7 @@ jobs:
     outputs:
       app-version: ${{ steps.set_version.outputs.app_version }}
     env:
-      FLUTTER_BASE: "flutter/authenticator"
+      FLUTTER_BASE: "fluter/authenticator"
       FLAVOUR: dev
 
     steps:
@@ -44,7 +44,7 @@ jobs:
     env:
       FLAVOUR: dev
       MAIN_FILE: main.dart
-      FLUTTER_BASE: "flutter/authenticator"
+      FLUTTER_BASE: "fluter/authenticator"
 
     steps:
       - name: "Clone repository"

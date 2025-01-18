@@ -15,7 +15,7 @@ dependencies:
   device_info_plus: ^11.2.0
   flutter:
     sdk: flutter
-  flutter_zxing: ^1.7.0
+  flutter_zxing: ^1.8.2
   logger: ^2.4.0
   path_provider: ^2.1.4
   provider: ^6.1.2

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../models/auth_item.dart';
 import '../../../services/otp/totp.dart';
@@ -93,12 +94,20 @@ class AuthItemTileState extends State<AuthItemTile> {
           ],
         ),
         trailing: !widget.isSelected
-            ? null
+            ? IconButton(
+                onPressed: _copyToClipboard, icon: Icon(Icons.copy_outlined))
             : IconButton(
                 onPressed: widget.onToggle,
                 icon: const Icon(Icons.check_box),
               ),
       ),
     );
+  }
+
+  _copyToClipboard() {
+    Clipboard.setData(ClipboardData(text: _otpCode));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Code copied to clipboard"),
+    ));
   }
 }

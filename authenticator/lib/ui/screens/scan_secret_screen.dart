@@ -150,8 +150,6 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
           scanStatus = "QR Not Supported";
         });
         SnackbarService.showSnackBar('QR Code not supported');
-      } finally {
-        isScanning = false;
       }
     });
   }

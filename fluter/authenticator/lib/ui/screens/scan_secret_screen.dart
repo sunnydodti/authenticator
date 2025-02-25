@@ -8,7 +8,6 @@ import 'package:authenticator/services/otp/otp_service.dart';
 import 'package:authenticator/ui/helpers/platform_helper.dart';
 import 'package:authenticator/ui/notifications/snackbar_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
@@ -35,14 +34,13 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
   final OtpService otpService = OtpService();
   final Logger logger = Log.logger;
 
-  Code? result;
   String scanStatus = "Scanning For Qr Code";
 
   int groupId = Constants.db.group.defaultGroupId;
 
   // new
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result2;
+  Barcode? result;
   QRViewController? controller;
 
   @override
@@ -58,13 +56,11 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
   @override
   void initState() {
     super.initState();
-    zx.startCameraProcessing();
   }
 
   @override
   void dispose() {
     super.dispose();
-    zx.stopCameraProcessing();
   }
 
   @override
@@ -109,7 +105,7 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
   }
 
   Widget buildResult() {
-    return SelectableText("${result2?.code}");
+    return SelectableText("${result?.code}");
   }
 
   Widget _buildScanner() {
@@ -119,7 +115,6 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
         onQRViewCreated: _onQRViewCreated,
         formatsAllowed: [BarcodeFormat.qrcode],
         overlay: QrScannerOverlayShape(),
-        
       ),
     );
   }
@@ -130,7 +125,7 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
       controller.pauseCamera();
 
       setState(() {
-        result2 = scanData;
+        result = scanData;
         scanStatus = "Scan Successful";
       });
       try {
@@ -145,12 +140,11 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
         logger.e("Error parsing uri: $e - \n$stackTrace");
 
         setState(() {
-          result2 = scanData;
+          result = scanData;
           scanStatus = "QR Not Supported";
         });
         controller.resumeCamera();
       }
     });
-
   }
 }

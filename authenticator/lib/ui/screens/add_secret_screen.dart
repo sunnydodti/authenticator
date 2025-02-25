@@ -41,6 +41,12 @@ class AddSecretScreenState extends State<AddSecretScreen> {
   final List<String> _keyTypes = ['TOTP', 'HOTP'];
 
   @override
+  void initState() {
+    _selectedKeyType = _keyTypes.first;
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
     _keyController.dispose();

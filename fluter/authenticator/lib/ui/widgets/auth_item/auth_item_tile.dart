@@ -92,14 +92,11 @@ class AuthItemTileState extends State<AuthItemTile> {
             ),
           ],
         ),
-        trailing: widget.isSelected
-            ? IconButton(
+        trailing: !widget.isSelected
+            ? null
+            : IconButton(
                 onPressed: widget.onToggle,
                 icon: const Icon(Icons.check_box),
-              )
-            : IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: _generateOtp,
               ),
       ),
     );

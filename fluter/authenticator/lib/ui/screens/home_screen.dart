@@ -9,6 +9,8 @@ import 'package:authenticator/ui/widgets/common/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/common/mobile_wrapper.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -29,22 +31,24 @@ class _HomeScreenState extends State<HomeScreen> {
     return PopScope(
       canPop: checkCanPop(),
       onPopInvokedWithResult: handelPop,
-      child: Scaffold(
-        appBar: AppBarWidget(),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Breadcrumbs(),
-            OtpProgressBar(
-              backgroundColor: Colors.white,
-              progressColor: Colors.blue,
-              totalDuration: Duration(milliseconds: epochInterval),
-              elapsedDuration: Duration(milliseconds: elapsedTime),
-            ),
-            AuthItemList(),
-          ],
+      child: MobileWrapper(
+        child: Scaffold(
+          appBar: AppBarWidget(),
+          body: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Breadcrumbs(),
+              OtpProgressBar(
+                backgroundColor: Colors.white,
+                progressColor: Colors.blue,
+                totalDuration: Duration(milliseconds: epochInterval),
+                elapsedDuration: Duration(milliseconds: elapsedTime),
+              ),
+              AuthItemList(),
+            ],
+          ),
+          floatingActionButton: AddAuthItemButton(),
         ),
-        floatingActionButton: AddAuthItemButton(),
       ),
     );
   }

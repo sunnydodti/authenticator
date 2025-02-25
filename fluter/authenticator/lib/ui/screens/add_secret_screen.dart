@@ -1,6 +1,7 @@
 import 'package:authenticator/constants/constants.dart';
 import 'package:authenticator/data/providers/group_provider.dart';
 import 'package:authenticator/ui/notifications/snackbar_service.dart';
+import 'package:authenticator/ui/widgets/common/mobile_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -89,24 +90,26 @@ class AddSecretScreenState extends State<AddSecretScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Account Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              buildNameField(),
-              SizedBox(height: 16),
-              buildKeyField(),
-              SizedBox(height: 16),
-              buildKeyTypeDropdownField(),
-              SizedBox(height: 32),
-              buildAddButton(),
-            ],
+    return MobileWrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Add Account Details'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                buildNameField(),
+                SizedBox(height: 16),
+                buildKeyField(),
+                SizedBox(height: 16),
+                buildKeyTypeDropdownField(),
+                SizedBox(height: 32),
+                buildAddButton(),
+              ],
+            ),
           ),
         ),
       ),

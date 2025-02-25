@@ -7,6 +7,7 @@ import 'package:authenticator/models/otp_config.dart';
 import 'package:authenticator/services/otp/otp_service.dart';
 import 'package:authenticator/ui/helpers/platform_helper.dart';
 import 'package:authenticator/ui/notifications/snackbar_service.dart';
+import 'package:authenticator/ui/widgets/common/mobile_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -65,22 +66,24 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Scan"),
-        centerTitle: true,
-        leading: SafeArea(
-            child: BackButton(
-                onPressed: () => NavigationHelper.navigateBack(context))),
-      ),
-      body: Card(
-        child: Column(
-          children: [
-            _buildScanner(),
-            // if (result2 != null) buildResult(),
-            Text(scanStatus),
-            Expanded(child: Row())
-          ],
+    return MobileWrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Scan"),
+          centerTitle: true,
+          leading: SafeArea(
+              child: BackButton(
+                  onPressed: () => NavigationHelper.navigateBack(context))),
+        ),
+        body: Card(
+          child: Column(
+            children: [
+              _buildScanner(),
+              // if (result2 != null) buildResult(),
+              Text(scanStatus),
+              Expanded(child: Row())
+            ],
+          ),
         ),
       ),
     );

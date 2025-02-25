@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:authenticator/data/providers/auth_item_provider.dart';
 import 'package:authenticator/data/providers/data_provider.dart';
 import 'package:authenticator/models/auth_item.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 import '../../constants/constants.dart';
 import '../../tools/logger.dart';
@@ -37,9 +40,31 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
 
   int groupId = Constants.db.group.defaultGroupId;
 
+  // new
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result2;
+  QRViewController? controller;
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    zx.startCameraProcessing();
+  }
+
   @override
   void dispose() {
     super.dispose();
+    zx.stopCameraProcessing();
   }
 
   @override
@@ -55,29 +80,14 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
       body: Card(
         child: Column(
           children: [
-            buildScanner(),
-            // if (result != null) buildResult(),
+            _buildScanner(),
+            // if (result2 != null) buildResult(),
             Text(scanStatus),
-            Row()
+            Expanded(child: Row())
           ],
         ),
       ),
     );
-  }
-
-  Widget buildScanner() {
-    return (!isCameraSupported)
-        ? Center(child: Text("Camera Not Supported"))
-        : SizedBox(
-            width: 300,
-            height: 350,
-            child: ReaderWidget(
-              onScan: _onScanSuccess,
-              onScanFailure: _onScanFailure,
-              actionButtonsAlignment: Alignment.bottomCenter,
-              toggleCameraIcon: Icon(Icons.swap_horizontal_circle_outlined),
-              galleryIcon: Icon(Icons.photo_library_outlined),
-            ));
   }
 
   addAuthItemFromConfig(OTPConfig config) async {
@@ -98,36 +108,49 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
     if (mounted) Navigator.pop(context);
   }
 
-  void _onScanSuccess(Code? code) async {
-    setState(() {
-      result = code;
-      scanStatus = "Scan Successful";
-    });
-    try {
-      OTPConfig otpConfig = otpService.parseOTPConfig("${code?.text}");
-      if (!otpService.isValidSecret(otpConfig.secret)) {
-        SnackbarService.showSnackBar('Invalid QR Code');
-        return;
-      }
-      await addAuthItemFromConfig(otpConfig);
-    } catch (e, stackTrace) {
-      logger.e("Error parsing uri: $e - \n$stackTrace");
-      setState(() {
-        result = code;
-        scanStatus = "QR Not Supported";
-      });
-    }
-  }
-
-  void _onScanFailure(Code? code) {
-    String message = "Scan Failed";
-    if (code?.error?.isNotEmpty == true) message = "Error: ${code?.error}";
-    setState(() {
-      scanStatus = message;
-    });
-  }
-
   Widget buildResult() {
-    return SelectableText("${result?.text}");
+    return SelectableText("${result2?.code}");
+  }
+
+  Widget _buildScanner() {
+    return Expanded(
+      child: QRView(
+        key: qrKey,
+        onQRViewCreated: _onQRViewCreated,
+        formatsAllowed: [BarcodeFormat.qrcode],
+        overlay: QrScannerOverlayShape(),
+        
+      ),
+    );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) async {
+      controller.pauseCamera();
+
+      setState(() {
+        result2 = scanData;
+        scanStatus = "Scan Successful";
+      });
+      try {
+        OTPConfig otpConfig = otpService.parseOTPConfig("${scanData.code}");
+        if (!otpService.isValidSecret(otpConfig.secret)) {
+          SnackbarService.showSnackBar('Invalid QR Code');
+          controller.resumeCamera();
+          return;
+        }
+        await addAuthItemFromConfig(otpConfig);
+      } catch (e, stackTrace) {
+        logger.e("Error parsing uri: $e - \n$stackTrace");
+
+        setState(() {
+          result2 = scanData;
+          scanStatus = "QR Not Supported";
+        });
+        controller.resumeCamera();
+      }
+    });
+
   }
 }

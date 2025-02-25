@@ -39837,6 +39837,8 @@ A.wb.prototype={
 a5(){var s=A.mb(B.bK,new A.pB()),r=$.aj()
 return new A.wc(new A.Ld(),s,new A.ba(null,t.am),new A.ui(B.hD,r),new A.ui(B.hD,r),A.b(["TOTP","HOTP"],t.s))}}
 A.wc.prototype={
+ao(){this.x=B.b.gU(this.y)
+this.aH()},
 l(){var s=this.r,r=$.aj()
 s.L$=r
 s.K$=0
@@ -39972,61 +39974,57 @@ return null},
 $S:0}
 A.an1.prototype={
 $1(a){return this.Xc(a)},
-Xc(a7){var s=0,r=A.w(t.H),q,p=2,o,n=[],m=this,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4,a5,a6
-var $async$$1=A.x(function(a8,a9){if(a8===1){o=a9
-s=p}while(true)switch(s){case 0:a5=m.a
-if(a5.Q){s=1
-break}a5.Q=!0
-a5.ac(new A.an_(a5,a7))
+Xc(a6){var s=0,r=A.w(t.H),q,p=2,o,n=this,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4,a5
+var $async$$1=A.x(function(a7,a8){if(a7===1){o=a8
+s=p}while(true)switch(s){case 0:a4=n.a
+if(a4.Q){s=1
+break}a4.Q=!0
+a4.ac(new A.an_(a4,a6))
 p=4
-i=a7.a
-if(!B.d.cO(i,"otpauth://totp/")&&!B.d.cO(i,"otpauth://hotp/"))A.Z(A.c1("Invalid OTP URI",null))
-h=B.d.q(i,"otpauth://totp/")?B.tB:B.tA
-g=B.d.I2(B.d.I2(i,"otpauth://totp/",""),"otpauth://hotp/","").split("?")
-f=g[0]
-e=A.kT("otpauth://totp/?"+g[1]).gVS()
-d=f.split(":")
-if(d.length===2){i=d[0]
-c=A.hQ(i,0,i.length,B.a5,!1)
-i=d[1]
-b=A.hQ(i,0,i.length,B.a5,!1)}else{i=d[0]
-b=A.hQ(i,0,i.length,B.a5,!1)
-c=e.h(0,"issuer")
-if(c==null)c=""}a=e.h(0,"secret")
-a0=e.h(0,"algorithm")
-if(a0==null)a0="SHA1"
-i=e.h(0,"digits")
-a1=A.zY(i==null?"6":i,null)
-if(a1==null)a1=6
-if(h===B.tB){i=e.h(0,"period")
-i=A.zY(i==null?"30":i,null)
-a2=i==null?30:i}else a2=null
-if(h===B.tA){i=e.h(0,"counter")
-i=A.zY(i==null?"0":i,null)
-a3=i==null?0:i}else a3=null
-if(a==null||a.length===0)A.Z(A.c1("Secret is missing from the URI",null))
-l=new A.a8C(h,c,b,a,a0,a1,a2==null?30:a2,a3)
-if(!a5.e.UW(l.d)){A.pD("Invalid QR Code")
-m.b.aom()}i=a5.xR(l)
+j=a6.a
+if(!B.d.cO(j,"otpauth://totp/")&&!B.d.cO(j,"otpauth://hotp/"))A.Z(A.c1("Invalid OTP URI",null))
+i=B.d.q(j,"otpauth://totp/")?B.tB:B.tA
+h=B.d.I2(B.d.I2(j,"otpauth://totp/",""),"otpauth://hotp/","").split("?")
+g=h[0]
+f=A.kT("otpauth://totp/?"+h[1]).gVS()
+e=g.split(":")
+if(e.length===2){j=e[0]
+d=A.hQ(j,0,j.length,B.a5,!1)
+j=e[1]
+c=A.hQ(j,0,j.length,B.a5,!1)}else{j=e[0]
+c=A.hQ(j,0,j.length,B.a5,!1)
+d=f.h(0,"issuer")
+if(d==null)d=""}b=f.h(0,"secret")
+a=f.h(0,"algorithm")
+if(a==null)a="SHA1"
+j=f.h(0,"digits")
+a0=A.zY(j==null?"6":j,null)
+if(a0==null)a0=6
+if(i===B.tB){j=f.h(0,"period")
+j=A.zY(j==null?"30":j,null)
+a1=j==null?30:j}else a1=null
+if(i===B.tA){j=f.h(0,"counter")
+j=A.zY(j==null?"0":j,null)
+a2=j==null?0:j}else a2=null
+if(b==null||b.length===0)A.Z(A.c1("Secret is missing from the URI",null))
+m=new A.a8C(i,d,c,b,a,a0,a1==null?30:a1,a2)
+if(!a4.e.UW(m.d)){A.pD("Invalid QR Code")
+n.b.aom()}j=a4.xR(m)
 s=7
-return A.n(i,$async$$1)
-case 7:n.push(6)
-s=5
+return A.n(j,$async$$1)
+case 7:p=2
+s=6
 break
 case 4:p=3
-a6=o
-k=A.a7(a6)
-j=A.ap(a6)
-a5.f.hj("Error parsing uri: "+A.j(k)+" - \n"+A.j(j))
-a5.ac(new A.an0(a5,a7))
+a5=o
+l=A.a7(a5)
+k=A.ap(a5)
+a4.f.hj("Error parsing uri: "+A.j(l)+" - \n"+A.j(k))
+a4.ac(new A.an0(a4,a6))
 A.pD("QR Code not supported")
-n.push(6)
-s=5
+s=6
 break
-case 3:n=[2]
-case 5:p=2
-a5.Q=!1
-s=n.pop()
+case 3:s=2
 break
 case 6:case 1:return A.u(q,r)
 case 2:return A.t(o,r)}})

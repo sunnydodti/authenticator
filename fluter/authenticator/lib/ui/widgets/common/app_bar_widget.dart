@@ -33,7 +33,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           centerTitle: true,
           leading: _darkModeButton(context),
           actions: [
-            _darkModeButton(context),
             AddGroupButton(),
           ],
         );

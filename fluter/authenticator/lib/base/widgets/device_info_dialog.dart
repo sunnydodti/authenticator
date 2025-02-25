@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../device_helper.dart';
@@ -27,12 +28,10 @@ class DeviceInfoDialog extends StatelessWidget {
   }
 
   Widget _getContent() {
-    if (Platform.isAndroid) {
-      return _androidContent();
-    }
-    if (Platform.isIOS) {
-      return _iOSContent();
-    }
+    if (kIsWeb) return const Text("You're on the web");
+
+    if (Platform.isAndroid) return _androidContent();
+    if (Platform.isIOS) return _iOSContent();
     return const Text("You're not on Android neither iOS");
   }
 

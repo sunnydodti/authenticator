@@ -8,6 +8,7 @@ import 'package:authenticator/ui/widgets/breadcrumbs.dart';
 import 'package:authenticator/ui/widgets/common/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_install/pwa_install.dart';
 
 import '../widgets/common/mobile_wrapper.dart';
 
@@ -45,6 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 elapsedDuration: Duration(milliseconds: elapsedTime),
               ),
               AuthItemList(),
+              if (PWAInstall().installPromptEnabled)
+                ElevatedButton(
+                  onPressed: () {
+                    PWAInstall().promptInstall_();
+                  },
+                  child: const Text('Install PWA'),
+                ),
             ],
           ),
           floatingActionButton: AddAuthItemButton(),

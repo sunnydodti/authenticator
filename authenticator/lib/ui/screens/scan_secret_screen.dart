@@ -11,7 +11,7 @@ import 'package:authenticator/ui/widgets/common/mobile_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart' as qrp;
 
 import '../../constants/constants.dart';
 import '../../tools/logger.dart';
@@ -41,8 +41,10 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
 
   // new
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  QRViewController? controller;
+  qrp.Barcode? result;
+  qrp.QRViewController? controller;
+
+  bool isScanning = false;
 
   @override
   void reassemble() {
@@ -79,7 +81,7 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
           child: Column(
             children: [
               _buildScanner(),
-              // if (result2 != null) buildResult(),
+              // if (result != null) buildResult(),
               Text(scanStatus),
               Expanded(child: Row())
             ],
@@ -113,19 +115,20 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
 
   Widget _buildScanner() {
     return Expanded(
-      child: QRView(
+      child: qrp.QRView(
         key: qrKey,
         onQRViewCreated: _onQRViewCreated,
-        formatsAllowed: [BarcodeFormat.qrcode],
-        overlay: QrScannerOverlayShape(),
+        formatsAllowed: [qrp.BarcodeFormat.qrcode],
+        overlay: qrp.QrScannerOverlayShape(),
       ),
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(qrp.QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
-      controller.pauseCamera();
+      if (isScanning) return;
+      isScanning = true;
 
       setState(() {
         result = scanData;
@@ -146,7 +149,9 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
           result = scanData;
           scanStatus = "QR Not Supported";
         });
-        controller.resumeCamera();
+        SnackbarService.showSnackBar('QR Code not supported');
+      } finally {
+        isScanning = false;
       }
     });
   }

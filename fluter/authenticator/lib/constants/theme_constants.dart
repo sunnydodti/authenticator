@@ -8,6 +8,9 @@ class ThemeConstants {
   BlackTheme get black => BlackTheme();
 
   WhiteTheme get white => WhiteTheme();
+
+  ThemeData get darkTheme => _darkTheme;
+  ThemeData get lightTheme => _lightTheme;
 }
 
 class DarkTheme {
@@ -41,3 +44,22 @@ class WhiteTheme {
   Color backgroundColor = Colors.white;
   Color buttonColor = Colors.teal;
 }
+
+MaterialColor accentColor = Colors.blue;
+
+ThemeData _lightTheme = ThemeData(
+  colorScheme: ColorScheme.light(
+    primary: accentColor,
+    surface: Colors.grey.shade200,
+  ),
+  useMaterial3: true,
+);
+
+ThemeData _darkTheme = ThemeData(
+  colorScheme: ColorScheme.dark(
+    primary: accentColor,
+    surface: Colors.grey.shade900,
+  ),
+  useMaterial3: true,
+);
+

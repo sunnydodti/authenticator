@@ -1,8 +1,8 @@
 import 'package:authenticator/data/providers/data_provider.dart';
 import 'package:authenticator/data/providers/group_provider.dart';
+import 'package:authenticator/data/providers/theme_provider.dart';
 import 'package:authenticator/ui/widgets/group/add_group_button.dart';
 import 'package:authenticator/ui/widgets/group/group_browser.dart';
-import 'package:authenticator/ui/widgets/refresh_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,9 +31,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         return AppBar(
           title: Text(title, style: TextStyle()),
           centerTitle: true,
-          backgroundColor: Constants.theme.dark.appBarColor,
-          leading: RefreshButton(),
+          leading: _darkModeButton(context),
           actions: [
+            _darkModeButton(context),
             AddGroupButton(),
           ],
         );
@@ -148,4 +148,14 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  Widget _darkModeButton(BuildContext context) {
+    Icon icon = Theme.of(context).brightness == Brightness.light
+        ? Icon(Icons.light_mode_outlined)
+        : Icon(Icons.dark_mode_outlined);
+    return IconButton(
+      icon: icon,
+      onPressed: () => context.read<ThemeProvider>().toggleTheme(),
+    );
+  }
 }

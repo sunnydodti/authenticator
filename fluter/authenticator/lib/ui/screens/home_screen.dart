@@ -46,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
             AuthItemList(),
           ],
         ),
-        backgroundColor: Constants.theme.dark.backgroundColor,
         floatingActionButton: AddAuthItemButton(),
       ),
     );

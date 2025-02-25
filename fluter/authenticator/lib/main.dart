@@ -18,7 +18,7 @@ void main() async {
       flavor: Flavor.PRD,
       color: Colors.blue,
       values: FlavorValues(baseUrl: "https://sunnydodti.com/dev"));
-  
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => ThemeProvider()),

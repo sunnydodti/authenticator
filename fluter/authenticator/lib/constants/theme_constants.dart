@@ -10,6 +10,7 @@ class ThemeConstants {
   WhiteTheme get white => WhiteTheme();
 
   ThemeData get darkTheme => _darkTheme;
+
   ThemeData get lightTheme => _lightTheme;
 }
 
@@ -62,4 +63,3 @@ ThemeData _darkTheme = ThemeData(
   ),
   useMaterial3: true,
 );
-

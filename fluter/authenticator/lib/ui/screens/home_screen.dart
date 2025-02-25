@@ -9,8 +9,6 @@ import 'package:authenticator/ui/widgets/common/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants/constants.dart';
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

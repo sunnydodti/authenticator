@@ -13,5 +13,4 @@ class StartUpService {
     await Hive.initFlutter();
     await Hive.openBox("box");
   }
-
 }

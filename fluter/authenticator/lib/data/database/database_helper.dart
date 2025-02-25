@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import '../../constants/constants.dart';
 import '../../tools/logger.dart';
@@ -17,17 +19,28 @@ class DatabaseHelper {
   DatabaseHelper._createInstance();
 
   factory DatabaseHelper() {
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+    }
     _databaseHelper ??= DatabaseHelper._createInstance();
     return _databaseHelper!;
   }
 
   Future<Database> get getDatabase async {
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+    }
     return _database ??= await initializeDatabase();
   }
 
   Future<Database> initializeDatabase() async {
-    final Directory directory = await getApplicationDocumentsDirectory();
-    String path = '${directory.path}/${Constants.db.databaseName}';
+    String path = "";
+    if (kIsWeb) {
+      "/assets/db/${Constants.db.databaseName}";
+    } else {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      path = '${directory.path}/${Constants.db.databaseName}';
+    }
     // await deleteDatabase(path);
     return await openDatabase(
       path,

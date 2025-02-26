@@ -11,10 +11,13 @@ class AddGroupButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AuthItemProvider>(
       builder: (context, value, child) {
-        return IconButton(
-          onPressed: () => showAddGroupForm(context),
-          icon: Icon(Icons.create_new_folder_outlined),
-          tooltip: "Add Group",
+        return Container(
+          margin: EdgeInsets.all(8),
+          child: IconButton(
+            onPressed: () => showAddGroupForm(context),
+            icon: Icon(Icons.create_new_folder_outlined),
+            tooltip: "Add Group",
+          ),
         );
       },
     );

@@ -19,9 +19,6 @@ class DatabaseHelper {
   DatabaseHelper._createInstance();
 
   factory DatabaseHelper() {
-    if (kIsWeb) {
-      databaseFactory = databaseFactoryFfiWeb;
-    }
     _databaseHelper ??= DatabaseHelper._createInstance();
     return _databaseHelper!;
   }
@@ -36,7 +33,7 @@ class DatabaseHelper {
   Future<Database> initializeDatabase() async {
     String path = "";
     if (kIsWeb) {
-      "/assets/db/${Constants.db.databaseName}";
+      path = "/assets/db/${Constants.db.databaseName}";
     } else {
       final Directory directory = await getApplicationDocumentsDirectory();
       path = '${directory.path}/${Constants.db.databaseName}';

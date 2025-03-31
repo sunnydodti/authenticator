@@ -12,6 +12,7 @@ import 'data/providers/theme_provider.dart';
 import 'services/startup_service.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await StartUpService.initialize();
 
   FlavorConfig(

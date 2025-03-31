@@ -93,7 +93,7 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
 
   addAuthItemFromConfig(OTPConfig config) async {
     AuthItem authItem = AuthItem(
-        name: config.account,
+        name: _getName(config),
         serviceName: config.issuer,
         secret: config.secret,
         code: "",
@@ -108,6 +108,15 @@ class _ScanSecretScreenState extends State<ScanSecretScreen> {
 
     if (mounted) Navigator.pop(context);
   }
+
+  String _getName(OTPConfig config) {
+    if (config.issuer.isNotEmpty) {
+      return "${config.issuer}: ${config.account}";
+    }
+    return config.account;
+  }
+
+  //)
 
   Widget buildResult() {
     return SelectableText("${result?.code}");

@@ -3,7 +3,7 @@ import 'package:authenticator/ui/helpers/navigation_helper.dart';
 import 'package:authenticator/ui/notifications/snackbar_service.dart';
 import 'package:authenticator/ui/widgets/add_auth_item_button.dart';
 import 'package:authenticator/ui/widgets/auth_item/auth_item_list.dart';
-import 'package:authenticator/ui/widgets/auth_item/otp_progress_bar.dart';
+// import 'package:authenticator/ui/widgets/auth_item/otp_progress_bar.dart';
 import 'package:authenticator/ui/widgets/breadcrumbs.dart';
 import 'package:authenticator/ui/widgets/common/app_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final int currentEpochTime = DateTime.now().millisecondsSinceEpoch;
-    final int elapsedTime = currentEpochTime % epochInterval;
+    // final int currentEpochTime = DateTime.now().millisecondsSinceEpoch;
+    // final int elapsedTime = currentEpochTime % epochInterval;
     return PopScope(
       canPop: checkCanPop(),
       onPopInvokedWithResult: handelPop,
@@ -38,12 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Breadcrumbs(),
-              OtpProgressBar(
-                backgroundColor: Colors.white,
-                progressColor: Colors.blue,
-                totalDuration: Duration(milliseconds: epochInterval),
-                elapsedDuration: Duration(milliseconds: elapsedTime),
-              ),
+              // OtpProgressBar(
+              //   backgroundColor: Colors.white,
+              //   progressColor: Colors.blue,
+              //   totalDuration: Duration(milliseconds: epochInterval),
+              //   elapsedDuration: Duration(milliseconds: elapsedTime),
+              // ),
               AuthItemList(),
               if (PWAInstall().installPromptEnabled)
                 ElevatedButton(

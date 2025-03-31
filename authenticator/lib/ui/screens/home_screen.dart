@@ -22,13 +22,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DataProvider get dataProvider =>
       Provider.of<DataProvider>(context, listen: false);
+  final int epochInterval = 30000;
 
   @override
   Widget build(BuildContext context) {
     final int currentEpochTime = DateTime.now().millisecondsSinceEpoch;
-    final int epochInterval = 30000; // 30 seconds for TOTP
     final int elapsedTime = currentEpochTime % epochInterval;
-
     return PopScope(
       canPop: checkCanPop(),
       onPopInvokedWithResult: handelPop,

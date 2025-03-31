@@ -81,7 +81,6 @@ class AuthItem {
         other.serviceName == serviceName &&
         other.secret == secret &&
         other.code == code;
-    other.groupId == groupId;
   }
 
   @override

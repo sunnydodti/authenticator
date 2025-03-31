@@ -38,8 +38,11 @@ class _BreadcrumbsState extends State<Breadcrumbs> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
-      color: Colors.blue.shade100.withAlpha(100),
+      color: theme.brightness == Brightness.light
+          ? Colors.blue.shade50.withAlpha(200)
+          : Colors.blue.shade800.withAlpha(25),
       padding: EdgeInsets.symmetric(horizontal: 0),
       height: 50,
       child: Consumer<DataProvider>(

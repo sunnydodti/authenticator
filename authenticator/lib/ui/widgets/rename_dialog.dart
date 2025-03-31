@@ -1,4 +1,3 @@
-import 'package:authenticator/enums/otp_type.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

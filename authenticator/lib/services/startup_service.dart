@@ -39,7 +39,6 @@ class StartUpService {
       // databaseFactoryOrNull = databaseFactoryFfi;
     }
     //desktop
-      databaseFactoryOrNull = databaseFactory.debugQuickLoggerWrapper();
 
     //mobile
   }

@@ -7,7 +7,7 @@ AuthItemConstants c = Constants.db.authItem;
 
 class AuthItem {
   final int? id;
-  final String name;
+  String name;
   final String? serviceName;
   final String secret;
   final String? code;

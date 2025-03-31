@@ -282,4 +282,13 @@ class DataProvider extends ChangeNotifier {
     }
     return isUpdated;
   }
+
+  renameAuthItem(AuthItem authItem, String text) async {
+    AuthItemService service = await _authItemService;
+    authItem.name = text;
+    var result = await service.updateAuthItem(authItem);
+
+    if (result > 0) return result;
+    return -1;
+  }
 }

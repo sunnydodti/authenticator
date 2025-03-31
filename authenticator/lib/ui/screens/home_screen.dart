@@ -6,7 +6,6 @@ import 'package:authenticator/ui/widgets/auth_item/auth_item_list.dart';
 import 'package:authenticator/ui/widgets/auth_item/otp_progress_bar.dart';
 import 'package:authenticator/ui/widgets/breadcrumbs.dart';
 import 'package:authenticator/ui/widgets/common/app_bar_widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pwa_install/pwa_install.dart';

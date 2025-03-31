@@ -67,8 +67,7 @@ class OtpService {
   bool isValidSecret(String secret) {
     TOTP totp = TOTP(secret, digits: 6);
     try {
-      var a = totp.now();
-      int b = 0;
+      totp.now();
     } on FormatException catch (e, stackTrace) {
       return false;
     }

@@ -80,7 +80,6 @@ class _BreadcrumbsState extends State<Breadcrumbs> {
         child: Text(group.name),
         onTap: () {
           dataProvider.resetStackTo(group);
-          print(group.name);
         },
       );
 

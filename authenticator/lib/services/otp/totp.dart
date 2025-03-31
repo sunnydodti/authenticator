@@ -21,7 +21,7 @@ class TOTP {
       throw ArgumentError("input must be a positive integer");
     }
 
-    if (secret == null || secret == "") return "";
+    if (secret.isEmpty) return "";
 
     Uint8List secretBytes = _byteSecret();
     Uint8List counterBytes = _intToByteString(input);

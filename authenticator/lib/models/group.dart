@@ -7,7 +7,7 @@ GroupConstants c = Constants.db.group;
 
 class Group {
   final int? id;
-  final String name;
+  String name;
   int? parentId;
 
   Group({

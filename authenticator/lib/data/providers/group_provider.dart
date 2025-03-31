@@ -140,4 +140,13 @@ class GroupProvider extends ChangeNotifier {
     if (result > 0) return result;
     return -1;
   }
+
+  renameGroup(Group group, String text) async {
+    GroupService service = await _groupService;
+    group.name = text;
+    var result = await service.updateGroup(group);
+
+    if (result > 0) return result;
+    return -1;
+  }
 }

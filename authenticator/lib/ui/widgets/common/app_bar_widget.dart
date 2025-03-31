@@ -3,6 +3,7 @@ import 'package:authenticator/data/providers/group_provider.dart';
 import 'package:authenticator/data/providers/theme_provider.dart';
 import 'package:authenticator/ui/widgets/group/add_group_button.dart';
 import 'package:authenticator/ui/widgets/group/group_browser.dart';
+import 'package:authenticator/ui/widgets/rename_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,6 +44,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   List<Widget> buildSelectedActions(
       BuildContext context, DataProvider provider) {
     return [
+      if (provider.selectedCount == 1)
+        IconButton(
+          onPressed: () => renameItem(context, provider),
+          icon: Icon(Icons.drive_file_rename_outline_outlined),
+          tooltip: "Rename",
+        ),
       IconButton(
         onPressed: () => moveItems(context, provider),
         icon: Icon(Icons.drive_file_move_outlined),
@@ -91,6 +98,15 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             buildMoveButton(context)
           ],
         );
+      },
+    );
+  }
+
+  void renameItem(BuildContext context, DataProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return RenameDialog();
       },
     );
   }

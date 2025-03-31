@@ -1,24 +1,27 @@
-import 'package:authenticator/ui/notifications/snackbar_service.dart';
+import 'package:authenticator/enums/otp_type.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/providers/data_provider.dart';
-import '../../../data/providers/group_provider.dart';
+import '../../data/providers/data_provider.dart';
+import '../../data/providers/group_provider.dart';
+import '../../enums/list_item_type.dart';
+import '../../models/list_item.dart';
+import '../notifications/snackbar_service.dart';
 
-class AddGroupDialog extends StatefulWidget {
-  const AddGroupDialog({super.key});
+class RenameDialog extends StatefulWidget {
+  const RenameDialog({super.key});
 
   @override
-  State<AddGroupDialog> createState() => _AddGroupDialogState();
+  State<RenameDialog> createState() => _RenameDialogState();
 }
 
-class _AddGroupDialogState extends State<AddGroupDialog> {
+class _RenameDialogState extends State<RenameDialog> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
 
-  String title = "Create new group";
-  String subTitle = "";
-
+  String title = "Rename";
+  String type = "";
+  late ListItem selected;
   GroupProvider get groupProvider =>
       Provider.of<GroupProvider>(context, listen: false);
 
@@ -27,8 +30,16 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
 
   @override
   void initState() {
-    if (dataProvider.currentGroup != null) {
-      subTitle = " in ${dataProvider.currentGroup?.name}";
+    final selectedItems = dataProvider.getSelectedItems();
+    selected = selectedItems[0];
+    if (selected.type == ListItemType.authItem) {
+      type = "Account";
+      nameController.text = selected.authItem!.name;
+    }
+
+    if (selected.type == ListItemType.group) {
+      type = "Group";
+      nameController.text = selected.group!.name;
     }
     super.initState();
   }
@@ -37,14 +48,18 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
 
   Future<bool> onConfirm() async {
     if (_formKey.currentState?.validate() ?? false) {
-      int parentId = dataProvider.currentGroupId;
-      int result = await groupProvider.createNewGroup(
-        nameController.text,
-        parentId,
-      );
-      String message = "Group not created";
+      int result = 0;
+      if (type == "Group") {
+        result = await groupProvider.renameGroup(
+            selected.group!, nameController.text);
+      } else {
+        result = await dataProvider.renameAuthItem(
+            selected.authItem!, nameController.text);
+      }
+      String message = "$type not renamed";
       if (result > 0) {
-        message = "Group created";
+        message = "$type renamed";
+        dataProvider.clearSelected();
         dataProvider.refresh(notify: true);
       }
 
@@ -56,11 +71,7 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // ThemeData theme = Theme.of(context);
-    // TextStyle buttonStyle =
-    //     TextStyle(color: ColorHelper.getButtonTextColor(theme));
     return AlertDialog(
-      // backgroundColor: ColorHelper.getTileColor(theme),
       title: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -70,15 +81,14 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
                 title,
                 textAlign: TextAlign.left,
               )),
-          if (subTitle.isNotEmpty)
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                subTitle,
-                textScaler: TextScaler.linear(.7),
-                textAlign: TextAlign.left,
-              ),
-            )
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              type.toLowerCase(),
+              textScaler: TextScaler.linear(.7),
+              textAlign: TextAlign.left,
+            ),
+          )
         ],
       ),
       content: Form(
@@ -86,7 +96,7 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
         child: TextFormField(
           controller: nameController,
           decoration: InputDecoration(
-              hintText: "Enter Group Name", labelText: "Group Name"),
+              hintText: "Enter $type Name", labelText: "$type Name"),
           validator: (value) {
             if (value == null || value.isEmpty) return 'name is required';
             return null;
@@ -101,7 +111,7 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
             }),
         TextButton(
           onPressed: onConfirm,
-          child: Text("Create"),
+          child: Text("Rename"),
         ),
       ],
     );

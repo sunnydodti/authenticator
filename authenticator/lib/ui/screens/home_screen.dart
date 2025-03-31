@@ -47,15 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 elapsedDuration: Duration(milliseconds: elapsedTime),
               ),
               AuthItemList(),
-              if (kIsWeb)
-                Column(
-                  children: [
-                    Text('This is a Demo PWA',
-                        style: TextStyle(color: Colors.red.shade400)),
-                    Text('Data will not be saved on refresh',
-                        style: TextStyle(color: Colors.red.shade400)),
-                  ],
-                ),
               if (PWAInstall().installPromptEnabled)
                 ElevatedButton(
                   onPressed: () {
